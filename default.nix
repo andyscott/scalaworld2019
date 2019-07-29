@@ -9,17 +9,26 @@ let
   pkgs = import nixpkgs {};
   texlive = pkgs.texlive.combine {
     inherit (pkgs.texlive)
-    scheme-small
-    noto
-    mweights
+    beamer
+    beton
+    ecc
+    ccfonts
+    concrete
+    concmath
+    concmath-fonts
     cm-super
     cmbright
-    fontaxes
     csquotes
-    wrapfig
-    pgf
     cutwin
-    beamer;
+    fontaxes
+    mweights
+    noto
+    pgf
+    scheme-small
+    subfiles
+    tikz-cd
+    wrapfig
+    ;
   };
 in {
   scala-world-2019 = pkgs.stdenv.mkDerivation {

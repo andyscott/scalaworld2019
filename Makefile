@@ -1,14 +1,23 @@
 default:
-	nix-shell --run 'make slides'
-slides:
-	mkdir -p target/aux
-	mkdir -p target/out
-	pdflatex \
-		-aux-directory=target/aux \
-		-output-directory=target/out \
-		slides.tex
-	mv target/out/slides.pdf .
+	nix-shell --run 'make all'
+
+%.pdf : %.tex
+	mkdir -p tmp
+	mkdir -p out
+
+	TEXINPUTS=src: pdflatex \
+		-halt-on-error \
+		-output-directory=tmp \
+		$<
+	mv tmp/$(notdir $@) out/
+
+
+TEX_FILES := $(patsubst %.tex,%.pdf,$(wildcard src/*.tex))
+
+all:	$(TEX_FILES)
+
 watch:
-	nix-shell --run 'watchexec -e tex make slides'
+	nix-shell --run 'watchexec -e tex make'
+
 repl:
 	nix repl '<nixpkgs>'

@@ -1,0 +1,66 @@
+\documentclass[pdf]{beamer}
+\mode<all>{
+  \usetheme{Madrid}
+  \usecolortheme{dove}
+  \useoutertheme{split}
+}
+\graphicspath{ {./images/} }
+\mode<handout>{\usecolortheme{dolphin}}
+\setbeamertemplate{itemize items}[default]
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{graphicx}
+\usepackage{url}
+\usepackage{colortbl}
+\usepackage{epstopdf}
+\usepackage{wrapfig}
+\usepackage[normalem]{ulem}
+\usepackage{pgf, tikz}
+\usepackage{listings}
+\usepackage{tikz-cd}
+\usepackage{subfiles}
+\usepackage{csquotes}
+\usetikzlibrary{arrows, automata, cd}
+
+\lstdefinestyle{scala}{
+  frame=tb,
+  language=scala,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{gray},
+  stringstyle=\color{red},
+  frame=single,
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=2,
+}
+
+\makeatletter
+\tikzset{
+  column sep/.code=\def\pgfmatrixcolumnsep{\pgf@matrix@xscale*(#1)},
+  row sep/.code   =\def\pgfmatrixrowsep{\pgf@matrix@yscale*(#1)},
+  matrix xscale/.code=%
+    \pgfmathsetmacro\pgf@matrix@xscale{\pgf@matrix@xscale*(#1)},
+  matrix yscale/.code=%
+    \pgfmathsetmacro\pgf@matrix@yscale{\pgf@matrix@yscale*(#1)},
+  matrix scale/.style={/tikz/matrix xscale={#1},/tikz/matrix yscale={#1}}}
+\def\pgf@matrix@xscale{1}
+\def\pgf@matrix@yscale{1}
+\makeatother
+
+\usebackgroundtemplate{
+  \includegraphics[width=\paperwidth]{images/bg.jpg}
+}
+
+\usefonttheme{serif}     % Font theme: serif
+\usepackage{ccfonts}     % Font family: Concrete Math
+\usepackage[T1]{fontenc} % Font encoding: T1
+
+\setbeamertemplate{itemize items}{\textperiodcentered}

@@ -1,2 +1,5 @@
 target/
-slides.pdf
+*.pdf
+tmp
+out
+.DS_Store

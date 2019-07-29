@@ -1,0 +1,25 @@
+\documentclass[include/preamble.tex]{subfiles}
+\begin{document}
+
+\begin{frame}[fragile]
+  \begin{center}
+
+    \begin{lstlisting}[style=scala]
+      def traverse[
+        F[_]: Functor: Foldable, G[_]: Applicative,
+        A, B
+      ](fa: F[A])(f: A => G[B]): G[F[B]]
+    \end{lstlisting}
+
+    \begin{tikzcd}[matrix scale=2.5]
+      F \hspace{1 pt} A
+      \arrow[r, "traverse"] &
+      G(F \hspace{1 pt} B) \\
+      A
+      \arrow[r, "f"] &
+      G \hspace{1 pt} B
+    \end{tikzcd}
+  \end{center}
+\end{frame}
+
+\end{document}

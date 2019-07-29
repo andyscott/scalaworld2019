@@ -1,0 +1,118 @@
+\documentclass[include/preamble.tex]{subfiles}
+
+% title information
+\title{Visual Learning}
+\author{Andy Scott}
+
+\usenavigationsymbolstemplate{}
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+{
+  \usebackgroundtemplate{
+    \includegraphics[width=\paperwidth]{images/bg_title.jpg}%
+  }
+  \frame{\titlepage}
+}
+
+{
+  \usebackgroundtemplate{
+    \includegraphics[width=\paperwidth]{images/bg_coffee.jpg}
+  }
+  \begin{frame}
+    \frametitle{who am I?}
+    \begin{itemize}
+      \pause
+    \item contributor to many; maintainer of few Scala libs
+    \item fan of graphs, trees, recursive structures
+    \item also dogs, hiking, coffee
+    \item work on Scala \& Bazel at Stripe
+      \newline
+      \pause
+    \item github https://github.com/andyscott
+    \item twitter https://twitter.com/andygscott
+    \end{itemize}
+  \end{frame}
+
+  \begin{frame}
+    \frametitle{Visual Learning}
+    \begin{displayquote}
+      Visual learning is a style in which a learner
+      utilizes graphs, charts, maps and diagrams.
+    \end{displayquote}
+    \rightline{{\rm --- Wikipedia}}
+  \end{frame}
+
+}
+
+\begin{frame}
+  \frametitle{Goals}
+  \begin{itemize}
+  \item learn about a few kinds of diagrams
+  \item learn a few concepts, visually
+  \item read/write code using diagrams
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Categories}
+  \begin{itemize}
+  \item roughly: a collection of objects, with arrows between them
+  \item restrictions
+    \begin{itemize}
+    \item identity arrow
+    \item composition
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\subfile{slide_world}
+
+\begin{frame}
+  \begin{displayquote}
+    All told, a monad in \(X\) is just a monoid in the category of
+    endofunctors of \(X\), with product \(\times\) replaced by composition of
+    endofunctors and unit set by the identity endofunctor.
+  \end{displayquote}
+  \rightline{{\rm --- Saunders Mac Lane}}
+\end{frame}
+
+\begin{frame}
+  \begin{displayquote}
+    All told, a monad in \(X\) is just a monoid in the category of
+    endofunctors of \(X\), with product \(\times\) replaced by composition of
+    endofunctors and unit set by the identity endofunctor.
+  \end{displayquote}
+  \rightline{{\rm --- Saunders Mac Lane}}
+\end{frame}
+
+\section{examples}
+\subsection{traverse}
+
+\subfile{slide_traverse}
+\subsection{hylo}
+
+\subfile{slide_hylo}
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+{
+  \usebackgroundtemplate{
+    \includegraphics[width=\paperwidth]{images/bg_title.jpg}
+  }
+  \begin{frame}
+    \begin{center}
+      questions?
+    \end{center}
+  \end{frame}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\end{document}
