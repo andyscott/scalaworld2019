@@ -8,14 +8,14 @@
     \pgfmathsetmacro{\foo}{256}
     \pgfmathsetmacro{\zoom}{1}
 
-    \pgfmathdeclarefunction{toX}{2}{%
+    \pgfmathdeclarefunction{toX}{1}{%
       \pgfmathparse{
-        (\foo/(2*pi))*2^\zoom*((#2*pi/180) + pi)
+        #1
       }
     }
-    \pgfmathdeclarefunction{toY}{2}{%
+    \pgfmathdeclarefunction{toY}{1}{%
       \pgfmathparse{
-        (\foo/(2*pi))*2^\zoom*(pi - ln(tan(pi/4 + (#1*pi/180)/2)))
+        #1 * 12
       }
     }
 
@@ -24,12 +24,36 @@
     \define@key{worldkeys}{long}{\def\long{#1}}
     \tikzdeclarecoordinatesystem{world}{
       \setkeys{worldkeys}{#1}
-      \pgfpoint{toX(\lat, \long)}{toY(\lat, \long)}
+      \pgfpoint{toX(\long)}{toY(\lat)}
     }
-    \begin{tikzpicture}[]
-      \node[] (seattle) at (world cs:lat=47.608013,long=-122.335167) {\(seattle\)};
-      \node[] (manchester) at (world cs:lat=53.483959,long=-2.244644) {\(manchester\)};
-      \node[] (pernith) at (world cs:lat=54.649208,long=-2.755508) {\(pernith\)};
+    \only<1>{\tikzset{every label/.style={text opacity = 0}}}
+    \only<2>{\tikzset{every label/.style={text opacity = 1}}}
+    \begin{tikzpicture}[
+        > = stealth,
+        point/.style = {
+          circle,
+          fill = black,
+          inner sep = 0.04cm,
+          node contents = {}
+        },
+        every label/.append style = {font=\footnotesize}
+      ]
+      \node (seattle)    at (world cs:lat=47.608013,long=-122.335167) [point, label=left:seattle];
+      \node (manchester) at (world cs:lat=53.483959,long=-2.244644)   [point, label=right:manchester];
+      \node (pernith)    at (world cs:lat=54.649208,long=-2.755508)   [point, label=right:pernith];
+      \node (amsterdam)  at (world cs:lat=52.370216,long=4.895168)    [point, label=right:amsterdam];
+      \node (edinburgh)  at (world cs:lat=55.953251,long=-3.188267)   [point, label=right:edinburgh];
+      \node (nyc)        at (world cs:lat=40.730610,long=-73.935242)  [point, label=left:nyc];
+      \node (london)     at (world cs:lat=51.509865,long=-0.118092)   [point, label=below:london];
+      \node (barcelona)  at (world cs:lat=41.390205,long=2.154007)    [point, label=right:barcelona];
+      \node (munich)     at (world cs:lat=48.137154,long=11.576124)   [point, label=right:munich];
+
+      \draw[->]
+      (seattle)    edge (amsterdam)
+      (amsterdam)  edge (manchester)
+      (manchester) edge (pernith)
+      (edinburgh)  edge (pernith)
+      (munich)     edge (manchester);
     \end{tikzpicture}
   \end{center}
 \end{frame}
