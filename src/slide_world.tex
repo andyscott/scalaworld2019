@@ -23,29 +23,44 @@
       \setkeys{worldkeys}{#1}
       \pgfpoint{toX(\long)}{toY(\lat)}
     }
-    \only<1>{\tikzset{every label/.style={text opacity = 0}}}
-    \only<2>{\tikzset{every label/.style={text opacity = 1}}}
+
+    \tikzstyle{c0} = [text opacity = 1]
+    \only<1->{\tikzstyle{c1} = [text opacity = 0]}
+    \only<2->{\tikzstyle{c1} = [text opacity = 1]}
+    \only<1->{\tikzstyle{c2} = [text opacity = 0]}
+    \only<3->{\tikzstyle{c2} = [text opacity = 1]}
+
     \begin{tikzpicture}[
         commutative diagrams/every diagram,
       ]
 
-      \node (seattle)    at (world cs:lat=47.608013,long=-122.335167) {SEA\Strichmaxerl[1.4]};
-      \node (manchester) at (world cs:lat=53.483959,long=-2.244644)   {MAN};
-      \node (pernith)    at (world cs:lat=54.649208,long=-2.755508)   {\Laughey[1.4]};
-      \node (amsterdam)  at (world cs:lat=52.370216,long=4.895168)    {AMS};
-      \node (edinburgh)  at (world cs:lat=55.953251,long=-3.188267)   {EDI};
-      \node (chicago)    at (world cs:lat=41.881832,long=-87.623177)  {ORD};
+      \node[c0] (pernith)    at (world cs:lat=54.649208,long=-2.755508)   {\Laughey[1.4]};
+
+      \node[c1] (manchester) at (world cs:lat=53.483959,long=-2.244644)   {MAN};
+      \node[c1] (amsterdam)  at (world cs:lat=52.370216,long=4.895168)    {AMS};
+      \node[c1] (edinburgh)  at (world cs:lat=55.953251,long=-3.188267)   {EDI};
+
+      \node[c2] (seattle)    at (world cs:lat=47.608013,long=-122.335167) {SEA\Strichmaxerl[1.4]};
+      \node[c2] (chicago)    at (world cs:lat=41.881832,long=-87.623177)  {ORD};
 
       \path[commutative diagrams/.cd, every arrow, every label]
-      (seattle)    edge[commutative diagrams/bend left=15] (amsterdam)
-      (amsterdam)  edge (manchester)
-      (manchester) edge (pernith)
 
-      (seattle)    edge (chicago)
-      (chicago)    edge[commutative diagrams/bend left=15] (edinburgh)
-      (edinburgh)  edge (pernith);
-
+      (pernith) edge[loop right] (pernith);
       \only<2->{
+        \path[commutative diagrams/.cd, every arrow, every label]
+        (amsterdam)  edge (manchester)
+        (manchester) edge (pernith)
+
+        (edinburgh)  edge (pernith);
+      }
+      \only<3->{
+        \path[commutative diagrams/.cd, every arrow, every label]
+        (seattle)    edge[commutative diagrams/bend left=15] (amsterdam)
+
+        (seattle)    edge (chicago)
+        (chicago)    edge[commutative diagrams/bend left=15] (edinburgh);
+      }
+      \only<4->{
         \node[anchor=north west] (topline) at (current bounding box.north west) {objects = municipalities};
         \node[anchor=north west] (botline) at (topline.south west) {morphisms = flight/train transit};
       }
