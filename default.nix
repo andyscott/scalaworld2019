@@ -27,6 +27,7 @@ let
     scheme-small
     subfiles
     tikz-cd
+    tikzsymbols
     wrapfig
     ;
   };
