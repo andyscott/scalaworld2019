@@ -1,7 +1,7 @@
 \documentclass[include/preamble.tex]{subfiles}
 
 % title information
-\title{Shape Skills}
+\title{Coding by Shapes}
 \subtitle{\texorpdfstring{$\square\bigtriangleup\bigtriangledown\bigcirc$}{}}
 \author{Andy Scott}
 
@@ -10,7 +10,6 @@
 \begin{document}
 
 %%%%%%%%%%%%%%%%%%%%%%%%
-
 
 {
   \usebackgroundtemplate{
@@ -39,10 +38,24 @@
   \end{frame}
 }
 
+\tikzset{
+  main node/.style={inner sep=0,outer sep=0},
+  label node/.style={inner sep=0,outer ysep=.2em,outer xsep=.4em,font=\scriptsize,overlay},
+  strike out/.style={shorten <=-.2em,shorten >=-.5em,overlay}
+}
+
+\newcommand<>{\acancelto}[3][]{
+  \tikz[baseline=(N.base)]{
+    \node[main node](N){$#2$};
+    \node#4[label node, #1, anchor=south west] at (N.north east){\only#4{$#3$}};
+    \draw#4[strike out,-latex,#1]  (N.south west) -- (N.north east);
+  }
+}
+
 \begin{frame}
   \frametitle{Goals}
   \begin{itemize}
-  \item learn about commutative diagrams
+  \item learn some diagramming basics
     \pause
   \item code $\rightarrow$ diagrams
     \pause
@@ -50,6 +63,12 @@
     \pause
   \item keep it simple but cover useful concepts
   \end{itemize}
+  \pause
+  \hspace{3em}
+  \begin{displayquote}
+    the real treasure was the \acancelto<6->[red]{friends}{folds} we learned along the way
+  \end{displayquote}
+  \centerline{{\rm --- Jon Pretty}}
 \end{frame}
 
 \begin{frame}
@@ -62,24 +81,22 @@
   \end{figure}
 \end{frame}
 
-\begin{frame}
-  \frametitle{Commutative Diagram 101}
-  \begin{itemize}
-  \item it's a picture of composition
-  \item nodes are objects
-  \item edges are morphisms
-  \end{itemize}
-\end{frame}
+{
+  \usebackgroundtemplate{
+    \includegraphics[width=\paperwidth]{images/bg_coffee_blob.jpg}
+  }
 
-\subfile{slide_world}
+  \begin{frame}
+    \frametitle{Commutative Diagram 101}
+    \begin{itemize}
+    \item it's a picture of composition
+    \item nodes are objects
+    \item edges are morphisms
+    \end{itemize}
+  \end{frame}
 
-\begin{frame}
-  \begin{center}
-    \begin{tikzpicture}
-      \node {$A$} edge[loop above] (A);
-    \end{tikzpicture}
-  \end{center}
-\end{frame}
+  \subfile{slide_world}
+}
 
 \begin{frame}[fragile]
   \begin{center}
@@ -89,6 +106,8 @@
     \end{tikzcd}
     \pause
     \pause
+    \newline
+    \newline
     \begin{lstlisting}[style=scala, escapeinside=||]
       def f(a: A): B = //...
       def g(b: B): C = //...
@@ -122,7 +141,18 @@
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\begin{comment}
+
+
+\begin{frame}
+  \begin{center}
+    \begin{tikzpicture}
+      \node {$A$} edge[loop above] (A);
+    \end{tikzpicture}
+  \end{center}
+\end{frame}
 
 
 \begin{frame}
@@ -146,13 +176,6 @@
   \end{itemize}
 \end{frame}
 
-\begin{frame}
-  \begin{displayquote}
-    All told, a monad in \(X\) is just a monoid in the category of
-    endofunctors of \(X\), with product \(\times\) replaced by composition of
-    endofunctors and unit set by the identity endofunctor.
-  \end{displayquote}
-  \rightline{{\rm --- Saunders Mac Lane}}
-\end{frame}
+\end{comment}
 
 \end{document}

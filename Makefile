@@ -1,7 +1,7 @@
 default:
 	nix-shell --run 'make all'
 
-%.pdf : %.tex
+%.pdf : src/%.tex
 	mkdir -p tmp
 	mkdir -p out
 
