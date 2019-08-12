@@ -1,5 +1,5 @@
 default:
-	nix-shell --run 'make all'
+	nix-shell --run 'make all.pdf'
 
 %.pdf : src/%.tex
 	mkdir -p tmp
