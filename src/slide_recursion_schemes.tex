@@ -1,0 +1,64 @@
+\documentclass[include/preamble.tex]{subfiles}
+\begin{document}
+
+\begin{frame}[fragile]
+  \begin{center}
+    \begin{tikzcd}[matrix scale=1, nodes={scale=1}]
+      {List[A]}
+      \ar[rrr, "foldRight"]
+      \ar[dd, swap, "match"]
+      & & &
+      B
+      \\
+      \\
+        {1 + A \times List[A]}
+        \ar[rrr, "id + id \times foldRight"]
+      & & & {1 + A \times B}
+        \ar[uu, swap, "\lbrack {z, f} \rbrack"]
+    \end{tikzcd}
+  \end{center}
+\end{frame}
+
+\begin{frame}[fragile]
+  \begin{center}
+    \begin{tikzcd}[matrix scale=1, nodes={scale=1}]
+      X
+      \ar[rrr, "foldRight"]
+      \ar[dd, swap]
+      & & &
+      B
+      \\
+      \\
+        {1 + A \times X}
+        \ar[rrr, "id + id \times foldRight"]
+      & & & {1 + A \times B}
+        \ar[uu, swap, "\lbrack {z, f} \rbrack"]
+    \end{tikzcd}
+  \end{center}
+\end{frame}
+
+\begin{frame}[fragile]
+  \begin{center}
+    \begin{tikzcd}[matrix scale=1, nodes={scale=1}]
+      X
+      \ar[visible on=<1>, rrr, "foldRight"]
+      \ar[visible on=<2>, rrr]
+      \ar[visible on=<3->, rrr, "hylo"]
+      \ar[visible on=<-2>, dd, swap]
+      \ar[visible on=<3->, dd, swap, "coalg"]
+      & & &
+      B
+      \\
+      \\
+        {F[X]}
+        \ar[visible on=<1>, rrr]
+        \ar[visible on=<1-2>, rrr]
+        \ar[visible on=<3->, rrr, "{map\ hylo}"]
+      & & & {F[B]}
+        \ar[visible on=<-2>, uu, swap]
+        \ar[visible on=<3->, uu, swap, "alg"]
+    \end{tikzcd}
+  \end{center}
+\end{frame}
+
+\end{document}
