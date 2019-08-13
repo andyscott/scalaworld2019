@@ -1,0 +1,82 @@
+\documentclass[include/preamble.tex]{subfiles}
+\begin{document}
+
+\tikzset{
+    invisible/.style={opacity=0},
+    visible on/.style={alt={#1{}{invisible}}},
+    alt/.code args={<#1>#2#3}{%
+      \alt<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}}%
+  }
+}
+
+\newsavebox{\boxA}
+\newsavebox{\boxB}
+\newsavebox{\boxC}
+\newsavebox{\boxD}
+
+\begin{frame}[fragile]
+  \begin{center}
+    \begin{flushleft}
+      imagine...
+    \end{flushleft}
+    \begin{itemize}
+      \pause
+    \item a list of strings
+      \pause
+    \item computing the total length of all of the strings
+    \end{itemize}
+  \end{center}
+\end{frame}
+
+\begin{frame}[fragile]
+  \begin{center}
+    \begin{tikzcd}[matrix scale=2.5, nodes={scale=1.25}]
+      {List[String]}
+      \arrow[visible on={<4->}, r, "f"]
+      \ar[visible on=<6-7>, rr, bend right, shift right, swap, "h"]
+      \ar[visible on=<8->, rr, bend right, shift right, swap, "g \circ f"]
+      & |[visible on=<4->]| {List[Int]}
+      \arrow[visible on=<5->, r, "g"]
+      & |[visible on=<2->]| Int
+    \end{tikzcd}
+    \newline
+    \newline
+    \begin{flushleft}
+
+      \begin{lrbox}{\boxA}
+        \begin{lstlisting}[style=scala]
+def f(x: List[String]): List[Int] = in.map(_.length)
+        \end{lstlisting}
+      \end{lrbox}
+
+      \begin{lrbox}{\boxB}
+        \begin{lstlisting}[style=scala]
+def g(x: List[Int]): Int = in.foldLeft(0)(_ + _)
+        \end{lstlisting}
+      \end{lrbox}
+
+      \begin{lrbox}{\boxC}
+        \begin{lstlisting}[style=scala]
+def h(x: List[String]): Int = g(f(x))
+        \end{lstlisting}
+      \end{lrbox}
+
+      \begin{lrbox}{\boxD}
+        \begin{lstlisting}[style=scala]
+                     /* or */ g compose f
+        \end{lstlisting}
+      \end{lrbox}
+
+      \visible<3->{\usebox{\boxA}}
+      \newline
+      \visible<5->{\usebox{\boxB}}
+      \newline
+      \newline
+      \visible<7->{\usebox{\boxC}}
+      \newline
+      \visible<8->{\usebox{\boxD}}
+    \end{flushleft}
+  \end{center}
+\end{frame}
+
+\end{document}

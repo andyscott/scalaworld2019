@@ -61,10 +61,20 @@
         (chicago)    edge[commutative diagrams/bend left=15] (edinburgh);
       }
       \only<4->{
-        \node[anchor=north west] (topline) at (current bounding box.north west) {objects = municipalities};
-        \node[anchor=north west] (botline) at (topline.south west) {morphisms = flight/train transit};
+        \node[anchor=north west] (topline0) at (current bounding box.north west) {objects = municipalities};
+        \node[anchor=north west] (botline0) at (topline0.south west) {morphisms = flight/train transit};
       }
-
+      \only<5->{
+        \node[anchor=south east] (botline1) at (current bounding box.south east) {
+          \only<6->{$SEA \rightarrow \Laughey$}
+        };
+        \node[anchor=south east] (midline1) at (botline1.north east) {
+          $SEA \rightarrow AMS \rightarrow MAN \rightarrow \Laughey$
+        };
+        \node[anchor=south east] (topline1) at (midline1.north east) {
+          $SEA \rightarrow ORD \rightarrow EDI \rightarrow \Laughey$
+        };
+      }
     \end{tikzpicture}
   \end{center}
 \end{frame}

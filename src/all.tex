@@ -1,7 +1,7 @@
 \documentclass[include/preamble.tex]{subfiles}
 
 % title information
-\title{Coding by Shapes}
+\title{Coding by Shape}
 \subtitle{\texorpdfstring{$\square\bigtriangleup\bigtriangledown\bigcirc$}{}}
 \author{Andy Scott}
 
@@ -98,25 +98,11 @@
   \subfile{slide_world}
 }
 
-\begin{frame}[fragile]
-  \begin{center}
-    \begin{tikzcd}[matrix scale=2.5]
-      A \arrow[rd, swap, "\only<2-4>{h}\only<6->{g \circ f}"] \arrow[r, "f"] & B \arrow[d, "g"] \\
-      & C
-    \end{tikzcd}
-    \pause
-    \pause
-    \newline
-    \newline
-    \begin{lstlisting}[style=scala, escapeinside=||]
-      def f(a: A): B = //...
-      def g(b: B): C = //...
-      def h(a: A): C = |\only<+>{???}\only<+>{g(???)}\only<+->{g(f(a))}|
-    \end{lstlisting}
-  \end{center}
-\end{frame}
+\subfile{slide_basics}
 
-\section{examples}
+\subfile{slide_products}
+
+\section{the only section}
 \subsection{traverse}
 
 \subfile{slide_traverse}
@@ -145,6 +131,23 @@
 
 \begin{comment}
 
+\begin{frame}[fragile]
+  \begin{center}
+    \begin{tikzcd}[matrix scale=2.5]
+      A \arrow[rd, swap, "\only<2-4>{h}\only<6->{g \circ f}"] \arrow[r, "f"] & B \arrow[d, "g"] \\
+      & C
+    \end{tikzcd}
+    \pause
+    \pause
+    \newline
+    \newline
+    \begin{lstlisting}[style=scala, escapeinside=||]
+      def f(a: A): B = //...
+      def g(b: B): C = //...
+      def h(a: A): C = |\only<+>{???}\only<+>{g(???)}\only<+->{g(f(a))}|
+    \end{lstlisting}
+  \end{center}
+\end{frame}
 
 \begin{frame}
   \begin{center}

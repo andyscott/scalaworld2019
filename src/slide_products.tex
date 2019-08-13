@@ -1,0 +1,20 @@
+\documentclass[include/preamble.tex]{subfiles}
+\begin{document}
+
+\begin{frame}[fragile]
+  \begin{center}
+    \begin{tikzcd}[matrix scale=3, nodes={scale=1.5}]
+      A \arrow[r, "i_A"] \arrow[dr, swap, "f"]
+      &  A \oplus B \arrow[d, dashed, swap, "\lbrack {f,g} \rbrack"]
+      & \arrow[dl, "g"] \arrow[l, swap, "i_B"] B
+      \\
+      & Z \arrow[d, dashed, "\langle {j,k} \rangle"] \arrow[dl, swap, "j"] \arrow[dr, "k"] &
+      \\
+      A
+      & \arrow[l, "p_A"] A \otimes B \arrow[r, swap, "p_b"]
+      & B
+    \end{tikzcd}
+  \end{center}
+\end{frame}
+
+\end{document}
