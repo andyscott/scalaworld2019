@@ -2,6 +2,8 @@
 \begin{document}
 
 \begin{frame}[fragile]
+  \frametitle{options}
+  \pause
   \begin{center}
     \begin{itemize}
     \item[]
@@ -14,7 +16,7 @@ case object None extends Option[Nothing]
       \vspace{1em}
       \pause
     \item
-      put something into an Option
+      put a value in an Option
       \newline
       \newline
       \pause
@@ -68,37 +70,120 @@ def none[A]: Option[A] = None
     \begin{tikzcd}[matrix scale=1, nodes={scale=1}]
       A \ar[rrr, "some"] & & & {Option[A]}
       \\
-      1 \ar[rrr, "empty"] & & & {Option[A]}
+      1 \ar[rrr, "none"] & & & {Option[A]}
+      \\
+      |[visible on=<2->]| 1 + A
+      \ar[visible on=<2->, rrr, "\lbrack {empty, some} \rbrack"]
+      & & &
+      |[visible on=<2->]| {Option[A]}
       \\
       |[visible on=<3->]| 1 + A
-      \ar[visible on=<3->, rrr, "\langle {empty,some} \rangle"]
       & & &
       |[visible on=<3->]| {Option[A]}
+      \ar[visible on=<3->, lll, swap, "???"]
     \end{tikzcd}
-    \pause
-    \newline
-    \newline
-    \begin{lstlisting}[style=scala]
-def none[A]: Option[A] = None
-def some[A](a: A): Option[A] = Some(a)
-    \end{lstlisting}
-    \pause
   \end{center}
 \end{frame}
 
 \begin{frame}[fragile]
   \begin{center}
-    \begin{tikzcd}[matrix scale=3, nodes={scale=1.5}]
-      {List[A]}
-      \arrow[r, "foldLeft"]
-      \arrow[d, "unpack"] &
-      B \\
-      Nil + A \times {List[A]}
-      \arrow[r, "step"] &
-      Nil + A \times B
-      \arrow[u, "step"]
+    \begin{lstlisting}[style=scala]
+def fold[A, B](x: Option[A])
+              (ifEmpty: B)(f: A => B): B = ???
+    \end{lstlisting}
+    \pause
+    \vspace{1em}
+    \begin{lstlisting}[style=scala]
+val x0  : Option[Int] = Some(2)
+val res0: Int         = x0.fold(0)(_ * 10)
+// 20
+
+val x1  : Option[Int] = None
+val res1: Int         = x1.fold(0)(_ * 10)
+// 0
+    \end{lstlisting}
+  \end{center}
+\end{frame}
+
+\begin{frame}[fragile]
+  \begin{center}
+    \begin{lstlisting}[style=scala]
+val x0  : Option[Int] = Some(2)
+val res0: Int         = x0.fold(0)(_ * 10)
+// 20
+
+val x1  : Option[Int] = None
+val res1: Int         = x1.fold(0)(_ * 10)
+// 0
+
+def fold[A, B](x: Option[A])
+              (ifEmpty: B)(f: A => B): B =
+  x match {
+    case None    => ifEmpty
+    case Some(a) => f(a)
+  }
+    \end{lstlisting}
+  \end{center}
+\end{frame}
+
+\begin{frame}[fragile]
+  \begin{center}
+    \begin{lstlisting}[style=scala]
+def fold[A, B](x: Option[A])
+              (ifEmpty: B)(f: A => B): B =
+  x match {
+    case None    => ifEmpty
+    case Some(a) => f(a)
+  }
+    \end{lstlisting}
+    \begin{tikzcd}[matrix scale=1, nodes={scale=1}]
+      {Option[A]} \arrow[rrr, "fold"] & & & B
+      \\
+      1 \arrow[rrr, "ifEmpty"] & & & B
+      \\
+      A \arrow[rrr, "f"] & & & B
     \end{tikzcd}
   \end{center}
 \end{frame}
+
+\begin{frame}[fragile]
+  \begin{center}
+    \begin{lstlisting}[style=scala]
+def fold[A, B](x: Option[A])
+              (ifEmpty: B)(f: A => B): B =
+  x match {
+    case None    => ifEmpty
+    case Some(a) => f(a)
+  }
+    \end{lstlisting}
+    \begin{tikzcd}[matrix scale=1, nodes={scale=1}]
+      {Option[A]} \arrow[rrr, "fold"] & & & B
+      \\
+      1 + A \arrow[rrr, "\lbrack {ifEmpty, f} \rbrack"] & & & B
+    \end{tikzcd}
+  \end{center}
+\end{frame}
+
+\begin{frame}[fragile]
+  \begin{center}
+    \begin{lstlisting}[style=scala]
+def fold[A, B](x: Option[A])
+              (ifEmpty: B)(f: A => B): B =
+  x match {
+    case None    => ifEmpty
+    case Some(a) => f(a)
+  }
+    \end{lstlisting}
+    \begin{tikzcd}[matrix scale=1, nodes={scale=1}]
+      {Option[A]}
+      \arrow[rr, "fold"]
+      \arrow[rd, swap, "match", visible on=<2->]
+      & & B
+      \\
+        & 1 + A \arrow[ru, swap, "\lbrack {ifEmpty, f} \rbrack"] &
+    \end{tikzcd}
+  \end{center}
+\end{frame}
+
 
 \end{document}
