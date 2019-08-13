@@ -2,102 +2,310 @@
 \begin{document}
 
 \begin{frame}[fragile]
+  \frametitle{lists}
+  \pause
   \begin{center}
-    \begin{itemize}
-    \item[]
-      \begin{lstlisting}[style=scala]
-sealed trait Option[+A]
-
-case class  Some[+A](value: A) extends Option[A]
-case object None extends Option[Nothing]
-      \end{lstlisting}
-      \vspace{1em}
-      \pause
-    \item
-      put something into an Option
-      \newline
-      \newline
-      \pause
-      \begin{tikzcd}[matrix scale=1, nodes={scale=1}]
-        A
-        \ar[rrr, visible on=<-3>]
-        \ar[rrr, "some", visible on=<4->]
-        & & & {Option[A]}
-      \end{tikzcd}
-      \pause
-      \vspace{1em}
-      \begin{lstlisting}[style=scala]
-def some[A](a: A): Option[A] = Some(a)
-      \end{lstlisting}
-    \end{itemize}
-  \end{center}
-\end{frame}
-
-\begin{frame}[fragile]
-  \begin{center}
-    \begin{itemize}
-    \item[]
-      \begin{lstlisting}[style=scala]
-sealed trait Option[+A]
-
-case class  Some[+A](value: A) extends Option[A]
-case object None extends Option[Nothing]
-      \end{lstlisting}
-      \vspace{1em}
-      \pause
-    \item
-      create an empty Option
-      \newline
-      \pause
-      \begin{lstlisting}[style=scala]
-def none[A]: Option[A] = None
-      \end{lstlisting}
-      \pause
-      \vspace{1em}
-      \begin{tikzcd}[matrix scale=1, nodes={scale=1}]
-        1
-        \ar[rrr, "none"]
-        & & & {Option[A]}
-      \end{tikzcd}
-    \end{itemize}
+    \begin{lstlisting}[style=scala]
+sealed trait List[A]
+case object Nil extends List[Nothing]
+case class ::[A]( // or 'Cons'
+  head: A,
+  tail: List[A]) extends List[A]
+    \end{lstlisting}
+    \vspace{1em}
+    \pause
+    \begin{tikzcd}[matrix scale=1, nodes={scale=1}]
+      1 \ar[rrr, "empty"] & & & {List[A]}
+      \\
+      |[visible on=<4->]| {A \times List[A]}
+      \ar[visible on=<4->, rrr, "cons"]
+      & & &
+      |[visible on=<4->]| {List[A]}
+    \end{tikzcd}
+    \pause
+    \pause
+    \vspace{1em}
+    \begin{lstlisting}[style=scala]
+def empty[A]: List[A] = Nil
+def cons[A](head: A, tail: List[A]): List[A]
+  = head :: tail
+    \end{lstlisting}
   \end{center}
 \end{frame}
 
 \begin{frame}[fragile]
   \begin{center}
     \begin{tikzcd}[matrix scale=1, nodes={scale=1}]
-      A \ar[rrr, "some"] & & & {Option[A]}
+      1 \ar[rrr, "empty"] & & & {List[A]}
       \\
-      1 \ar[rrr, "empty"] & & & {Option[A]}
-      \\
-      |[visible on=<3->]| 1 + A
-      \ar[visible on=<3->, rrr, "\langle {empty,some} \rangle"]
+      {A \times List[A]}
+      \ar[rrr, "cons"]
       & & &
-      |[visible on=<3->]| {Option[A]}
+      {List[A]}
+      \\
+      |[visible on=<2->]| {1 + A \times List[A]}
+      \ar[visible on=<2->, rrr, "\lbrack {empty, cons} \rbrack"]
+      & & &
+      |[visible on=<2->]| {List[A]}
+      \\
+      |[visible on=<3->]| {1 + A \times List[A]}
+      & & &
+      |[visible on=<3->]| {List[A]}
+      \ar[visible on=<3->, lll, swap, "match"]
     \end{tikzcd}
-    \pause
-    \newline
-    \newline
-    \begin{lstlisting}[style=scala]
-def none[A]: Option[A] = None
-def some[A](a: A): Option[A] = Some(a)
-    \end{lstlisting}
-    \pause
   \end{center}
 \end{frame}
 
 \begin{frame}[fragile]
   \begin{center}
-    \begin{tikzcd}[matrix scale=3, nodes={scale=1.5}]
-      {List[A]}
-      \arrow[r, "foldLeft"]
-      \arrow[d, "unpack"] &
-      B \\
-      Nil + A \times {List[A]}
-      \arrow[r, "step"] &
-      Nil + A \times B
-      \arrow[u, "step"]
+    \begin{lstlisting}[style=scala]
+def foldRight[A, B](x: List[A])
+                   (z: B)(f: (A, B) => B): B = ???
+    \end{lstlisting}
+    \pause
+    \vspace{1em}
+    \begin{tikzcd}[matrix scale=1, nodes={scale=1}]
+      {List[A]} \ar[rrr, "foldRight"]
+      & & &
+      B
+      \\
+      1  \ar[rrr, "z"]
+      & & &
+      B
+      \\
+      A \times B  \ar[rrr, "f"]
+      & & &
+      B
     \end{tikzcd}
+  \end{center}
+\end{frame}
+
+\begin{frame}[fragile]
+  \begin{center}
+    \begin{lstlisting}[style=scala]
+def foldRight[A, B](x: List[A])
+                   (z: B)(f: (A, B) => B): B = ???
+    \end{lstlisting}
+    \vspace{1em}
+    \begin{tikzcd}[matrix scale=1, nodes={scale=1}]
+      {List[A]} \ar[rrr, "foldRight"]
+      & & &
+      B
+      \\
+      {1 + A \times B}
+      \ar[rrr, "\lbrack {z, f} \rbrack"]
+      & & &
+      B
+    \end{tikzcd}
+  \end{center}
+\end{frame}
+
+
+\begin{frame}[fragile]
+  \begin{center}
+    \begin{lstlisting}[style=scala]
+def foldRight[A, B](x: List[A])
+                   (z: B)(f: (A, B) => B): B = ???
+    \end{lstlisting}
+    \vspace{1em}
+    \begin{tikzcd}[matrix scale=1, nodes={scale=1}]
+      {List[A]}
+      \ar[rrr, "foldRight"]
+      \ar[visible on=<2->, dd, swap, "match"]
+      & & &
+      B
+      \\
+      \\
+      |[visible on=<2->]| {1 + A \times List[A]}
+      \ar[visible on=<3->, rrr, "???"]
+      & & & {1 + A \times B}
+      \ar[uu, swap, "\lbrack {z, f} \rbrack"]
+    \end{tikzcd}
+  \end{center}
+\end{frame}
+
+\begin{frame}[fragile]
+  \begin{center}
+    \begin{tikzcd}[matrix scale=1, nodes={scale=1}]
+      {1 + A \times List[A]}
+      \ar[rrr, "???"]
+      & & & {1 + B \times A}
+      \\
+      |[visible on=<2->]| {1 + A \times List[A]}
+      \ar[visible on=<2->, rrr, "\lbrack {id, ???} \rbrack"]
+      & & &
+      |[visible on=<2->]| {1 + A \times B}
+      \\
+      |[visible on=<3->]| {1 + A \times List[A]}
+      \ar[visible on=<3->, rrr, "\lbrack {id, \langle {id, ???} \rangle} \rbrack"]
+      & & &
+      |[visible on=<3->]| {1 + A \times B}
+      \\
+      |[visible on=<4->]| {1 + A \times List[A]}
+      \ar[visible on=<4->, rrr, "id + id \times ???"]
+      & & &
+      |[visible on=<4->]| {1 + A \times B}
+    \end{tikzcd}
+  \end{center}
+\end{frame}
+
+\begin{frame}[fragile]
+  \begin{center}
+    \begin{lstlisting}[style=scala]
+def foldRight[A, B](x: List[A])
+                   (z: B)(f: (A, B) => B): B = ???
+    \end{lstlisting}
+    \vspace{1em}
+    \begin{tikzcd}[matrix scale=1, nodes={scale=1}]
+      {List[A]}
+      \ar[rrr, "foldRight"]
+      \ar[dd, swap, "match"]
+      & & &
+      B
+      \\
+      \\
+        {1 + A \times List[A]}
+        \ar[visible on=<1>, rrr, "???"]
+        \ar[visible on=<2>, rrr, "id + id \times ???"]
+        \ar[visible on=<3->, rrr, "id + id \times foldRight"]
+      & & & {1 + B \times A}
+        \ar[uu, swap, "\lbrack {z, f} \rbrack"]
+    \end{tikzcd}
+  \end{center}
+\end{frame}
+
+\begin{frame}[fragile]
+  \begin{center}
+    \begin{tikzcd}[matrix scale=1, nodes={scale=1}]
+      {List[A]}
+      \ar[rrr, "foldRight"]
+      \ar[dd, swap, "match"]
+      & & &
+      B
+      \\
+      \\
+        {1 + A \times List[A]}
+        \ar[rrr, "id + id \times foldRight"]
+      & & & {1 + B \times A}
+        \ar[uu, swap, "\lbrack {z, f} \rbrack"]
+    \end{tikzcd}
+    \vspace{1em}
+    \begin{lstlisting}[style=scala]
+def foldRight[A, B](x: List[A])
+                   (z: B)(f: (A, B) => B): B =
+  ???
+    \end{lstlisting}
+  \end{center}
+\end{frame}
+
+\begin{frame}[fragile]
+  \begin{center}
+    \begin{tikzcd}[matrix scale=1, nodes={scale=1}]
+      {List[A]}
+      \ar[rrr, "foldRight"]
+      \ar[dd, swap, "match"]
+      & & &
+      B
+      \\
+      \\
+        {1 + A \times List[A]}
+        \ar[rrr, "id + id \times foldRight"]
+      & & & {1 + B \times A}
+        \ar[uu, swap, "\lbrack {z, f} \rbrack"]
+    \end{tikzcd}
+    \vspace{1em}
+    \begin{lstlisting}[style=scala]
+def foldRight[A, B](x: List[A])
+                   (z: B)(f: (A, B) => B): B =
+  x match {
+    case Nil          => ???
+    case head :: tail => ???
+  }
+    \end{lstlisting}
+  \end{center}
+\end{frame}
+
+\begin{frame}[fragile]
+  \begin{center}
+    \begin{tikzcd}[matrix scale=1, nodes={scale=1}]
+      {List[A]}
+      \ar[rrr, "foldRight"]
+      \ar[dd, swap, "match"]
+      & & &
+      B
+      \\
+      \\
+        {1 + A \times List[A]}
+        \ar[rrr, "id + id \times foldRight"]
+      & & & {1 + B \times A}
+        \ar[uu, swap, "\lbrack {z, f} \rbrack"]
+    \end{tikzcd}
+    \vspace{1em}
+    \begin{lstlisting}[style=scala]
+def foldRight[A, B](x: List[A])
+                   (z: B)(f: (A, B) => B): B =
+  x match {
+    case Nil          => z
+    case head :: tail => ???
+  }
+    \end{lstlisting}
+  \end{center}
+\end{frame}
+
+\begin{frame}[fragile]
+  \begin{center}
+    \begin{tikzcd}[matrix scale=1, nodes={scale=1}]
+      {List[A]}
+      \ar[rrr, "foldRight"]
+      \ar[dd, swap, "match"]
+      & & &
+      B
+      \\
+      \\
+        {1 + A \times List[A]}
+        \ar[rrr, "id + id \times foldRight"]
+      & & & {1 + B \times A}
+        \ar[uu, swap, "\lbrack {z, f} \rbrack"]
+    \end{tikzcd}
+    \vspace{1em}
+    \begin{lstlisting}[style=scala]
+def foldRight[A, B](x: List[A])
+                   (z: B)(f: (A, B) => B): B =
+  x match {
+    case Nil          => z
+    case head :: tail =>
+      foldRight(tail)(z)(f)
+      ???
+  }
+    \end{lstlisting}
+  \end{center}
+\end{frame}
+
+\begin{frame}[fragile]
+  \begin{center}
+    \begin{tikzcd}[matrix scale=1, nodes={scale=1}]
+      {List[A]}
+      \ar[rrr, "foldRight"]
+      \ar[dd, swap, "match"]
+      & & &
+      B
+      \\
+      \\
+        {1 + A \times List[A]}
+        \ar[rrr, "id + id \times foldRight"]
+      & & & {1 + B \times A}
+        \ar[uu, swap, "\lbrack {z, f} \rbrack"]
+    \end{tikzcd}
+    \vspace{1em}
+    \begin{lstlisting}[style=scala]
+def foldRight[A, B](x: List[A])
+                   (z: B)(f: (A, B) => B): B =
+  x match {
+    case Nil          => z
+    case head :: tail =>
+      f(head, foldRight(tail)(z)(f))
+  }
+    \end{lstlisting}
   \end{center}
 \end{frame}
 
