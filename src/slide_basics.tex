@@ -32,13 +32,13 @@
 
       \begin{lrbox}{\boxA}
         \begin{lstlisting}[style=scala]
-def f(x: List[String]): List[Int] = in.map(_.length)
+def f(x: List[String]): List[Int] = x.map(_.length)
         \end{lstlisting}
       \end{lrbox}
 
       \begin{lrbox}{\boxB}
         \begin{lstlisting}[style=scala]
-def g(x: List[Int]): Int = in.foldLeft(0)(_ + _)
+def g(x: List[Int]): Int = x.foldLeft(0)(_ + _)
         \end{lstlisting}
       \end{lrbox}
 
