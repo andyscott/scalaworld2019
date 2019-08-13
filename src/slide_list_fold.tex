@@ -129,7 +129,7 @@ def foldRight[A, B](x: List[A])
     \begin{tikzcd}[matrix scale=1, nodes={scale=1}]
       {1 + A \times List[A]}
       \ar[rrr, "???"]
-      & & & {1 + B \times A}
+      & & & {1 + A \times B}
       \\
       |[visible on=<2->]| {1 + A \times List[A]}
       \ar[visible on=<2->, rrr, "\lbrack {id, ???} \rbrack"]
