@@ -66,3 +66,23 @@
 
 \setbeamertemplate{itemize items}{\textperiodcentered}
 \setbeamertemplate{caption}{\raggedright\insertcaption\par}
+
+
+\tikzset{
+    invisible/.style={opacity=0},
+    visible on/.style={alt={#1{}{invisible}}},
+    alt/.code args={<#1>#2#3}{%
+      \alt<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}}%
+  }
+}
+
+\newsavebox{\boxA}
+\newsavebox{\boxB}
+\newsavebox{\boxC}
+\newsavebox{\boxD}
+\newsavebox{\boxE}
+\newsavebox{\boxF}
+\newsavebox{\boxG}
+\newsavebox{\boxH}
+\newsavebox{\boxI}
+\newsavebox{\boxJ}

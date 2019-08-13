@@ -1,6 +1,110 @@
 \documentclass[include/preamble.tex]{subfiles}
 \begin{document}
 
+
+\begin{frame}[fragile]
+  \begin{flushleft}
+      imagine...
+    \begin{itemize}
+      \item you have an A value and a B value
+        \pause
+      \item[]
+        \begin{lstlisting}[style=scala]
+case class AnB(a: A, b: B)
+type       AnB = (A, B)
+        \end{lstlisting}
+    \end{itemize}
+  \end{flushleft}
+\end{frame}
+
+\begin{frame}[fragile]
+  \begin{center}
+
+    \begin{lrbox}{\boxA}
+      \begin{lstlisting}[style=scala]
+val ab: (A, B) = //...
+      \end{lstlisting}
+    \end{lrbox}
+
+    \begin{lrbox}{\boxB}
+      \begin{lstlisting}[style=scala]
+val a: A = ab._1
+      \end{lstlisting}
+    \end{lrbox}
+
+    \begin{lrbox}{\boxC}
+      \begin{lstlisting}[style=scala]
+val b: B = ab._2
+      \end{lstlisting}
+    \end{lrbox}
+
+    \begin{lrbox}{\boxD}
+      \begin{lstlisting}[style=scala]
+val z: Z = //...
+      \end{lstlisting}
+    \end{lrbox}
+
+    \begin{lrbox}{\boxE}
+      \begin{lstlisting}[style=scala]
+def j(z: Z): A = //...
+def k(z: Z): B = //...
+      \end{lstlisting}
+    \end{lrbox}
+
+    \begin{flushleft}
+      \usebox{\boxA}
+      \newline
+      \only<2->{\usebox{\boxB}}
+      \newline
+      \only<3->{\usebox{\boxC}}
+      \newline
+      \only<4->{\usebox{\boxD}}
+      \newline
+      \only<5->{\usebox{\boxE}}
+    \end{flushleft}
+    \begin{tikzpicture}[overlay]
+      \draw (0, 0) node[inner sep=0] {
+        \begin{tikzcd}[matrix scale=3, nodes={scale=1.5}]
+          & |[opacity = 0]| ASDF % I'm just here to take up space
+          &
+          \\
+          &
+          |[opacity = 0]| Z
+          %\arrow[d, dashed, "\langle {j,k} \rangle"]
+          %\arrow[dl, swap, "j"]
+          %\arrow[dr, "k"]
+          &
+          \\
+          |[visible on=<2->]| A
+          &
+          \arrow[l, "\_1", visible on=<2->]
+          \only<1->{(A, B)}
+          %\only<2->{A \otimes B}
+          \arrow[r, swap, "\_2", visible on=<3->]
+          &
+          |[visible on=<3->]| B
+        \end{tikzcd}
+      };
+    \end{tikzpicture}
+  \end{center}
+\end{frame}
+
+\begin{frame}[fragile]
+  \begin{center}
+    \begin{tikzcd}[matrix scale=3, nodes={scale=1.5}]
+      A \arrow[r, "i_A"] \arrow[dr, swap, "f"]
+      &  A \oplus B \arrow[d, dashed, swap, "\lbrack {f,g} \rbrack"]
+      & \arrow[dl, "g"] \arrow[l, swap, "i_B"] B
+      \\
+      & Z &
+      \\
+      &
+      &
+    \end{tikzcd}
+  \end{center}
+\end{frame}
+
+
 \begin{frame}[fragile]
   \begin{center}
     \begin{tikzcd}[matrix scale=3, nodes={scale=1.5}]
