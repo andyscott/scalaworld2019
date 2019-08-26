@@ -47,8 +47,8 @@
 \newcommand<>{\acancelto}[3][]{
   \tikz[baseline=(N.base)]{
     \node[main node](N){$#2$};
-    \node#4[label node, #1, anchor=south west] at (N.north east){\only#4{$#3$}};
-    \draw#4[strike out,-latex,#1]  (N.south west) -- (N.north east);
+    \node#4[label node, #1, anchor=north west] at (N.south east){\only#4{$#3$}};
+    \draw#4[strike out,-latex,#1]  (N.north west) -- (N.south east);
   }
 }
 
@@ -66,7 +66,7 @@
   \pause
   \hspace{3em}
   \begin{displayquote}
-    the real treasure was the \acancelto<6->[red]{friends}{folds} we learned along the way
+    the real treasure is the \acancelto<6->[red]{friends}{folds} we \acancelto<6->[red]{make}{learn} along the way
   \end{displayquote}
   \centerline{{\rm --- Jon Pretty}}
 \end{frame}
@@ -85,16 +85,6 @@
   \usebackgroundtemplate{
     \includegraphics[width=\paperwidth]{images/bg_coffee_blob.jpg}
   }
-
-  \begin{frame}
-    \frametitle{Commutative Diagram 101}
-    \begin{itemize}
-    \item it's a picture of composition
-    \item nodes are objects
-    \item edges are morphisms
-    \end{itemize}
-  \end{frame}
-
   \subfile{slide_world}
 }
 

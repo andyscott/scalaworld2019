@@ -4,15 +4,15 @@
 
 \begin{frame}[fragile]
   \begin{center}
-
+    \frametitle{Commutative Diagram 101}
     \pgfmathdeclarefunction{toX}{1}{%
       \pgfmathparse{
-        (#1 + 125) * 2
+        ((#1 + 125) * 2.2)
       }
     }
     \pgfmathdeclarefunction{toY}{1}{%
       \pgfmathparse{
-        ((#1 - 40)/4)^(2)*12
+        ((#1 - 40)/4)^(2)*13
       }
     }
 
@@ -24,11 +24,15 @@
       \pgfpoint{toX(\long)}{toY(\lat)}
     }
 
-    \tikzstyle{c0} = [text opacity = 1]
+    %\tikzstyle{c0} = [text opacity = 1]
+    \only<1->{\tikzstyle{c0} = [text opacity = 0]}
+    \only<3->{\tikzstyle{c0} = [text opacity = 1]}
+
     \only<1->{\tikzstyle{c1} = [text opacity = 0]}
-    \only<2->{\tikzstyle{c1} = [text opacity = 1]}
+    \only<5->{\tikzstyle{c1} = [text opacity = 1]}
+
     \only<1->{\tikzstyle{c2} = [text opacity = 0]}
-    \only<3->{\tikzstyle{c2} = [text opacity = 1]}
+    \only<7->{\tikzstyle{c2} = [text opacity = 1]}
 
     \begin{tikzpicture}[
         commutative diagrams/every diagram,
@@ -44,29 +48,25 @@
       \node[c2] (chicago)    at (world cs:lat=41.881832,long=-87.623177)  {ORD};
 
       \path[commutative diagrams/.cd, every arrow, every label]
-
-      (pernith) edge[loop right] (pernith);
-      \only<2->{
+      %(pernith) edge[loop right] (pernith)
+      ;
+      \only<5->{
         \path[commutative diagrams/.cd, every arrow, every label]
         (amsterdam)  edge (manchester)
         (manchester) edge (pernith)
 
         (edinburgh)  edge (pernith);
       }
-      \only<3->{
+      \only<7->{
         \path[commutative diagrams/.cd, every arrow, every label]
         (seattle)    edge[commutative diagrams/bend left=15] (amsterdam)
 
         (seattle)    edge (chicago)
         (chicago)    edge[commutative diagrams/bend left=15] (edinburgh);
       }
-      \only<4->{
-        \node[anchor=north west] (topline0) at (current bounding box.north west) {objects = municipalities};
-        \node[anchor=north west] (botline0) at (topline0.south west) {morphisms = flight/train transit};
-      }
-      \only<5->{
+      \only<8->{
         \node[anchor=south east] (botline1) at (current bounding box.south east) {
-          \only<6->{$SEA \rightarrow \Laughey$}
+          \only<9->{$SEA \rightarrow \Laughey$}
         };
         \node[anchor=south east] (midline1) at (botline1.north east) {
           $SEA \rightarrow AMS \rightarrow MAN \rightarrow \Laughey$
@@ -75,6 +75,18 @@
           $SEA \rightarrow ORD \rightarrow EDI \rightarrow \Laughey$
         };
       }
+      \node[anchor=north west] at (current bounding box.north west) {
+        \begin{minipage}{0.5\textwidth}
+          \vspace{0.5em}
+          \begin{itemize}
+          \item<2-> nodes (objects)
+          \item<4-> edges (morphisms)
+          \item<6-> paths between nodes must
+            \newline give same result
+          \item<10-> paths show composition
+          \end{itemize}
+        \end{minipage}
+      };
     \end{tikzpicture}
   \end{center}
 \end{frame}
