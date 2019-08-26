@@ -1,0 +1,37 @@
+\documentclass[include/preamble.tex]{subfiles}
+\begin{document}
+
+\tikzset{
+  main node/.style={inner sep=0,outer sep=0},
+  label node/.style={inner sep=0,outer ysep=.2em,outer xsep=.4em,font=\scriptsize,overlay},
+  strike out/.style={shorten <=-.2em,shorten >=-.5em,overlay}
+}
+
+\newcommand<>{\acancelto}[3][]{
+  \tikz[baseline=(N.base)]{
+    \node[main node](N){$#2$};
+    \node#4[label node, #1, anchor=north west] at (N.south east){\only#4{$#3$}};
+    \draw#4[strike out,-latex,#1]  (N.north west) -- (N.south east);
+  }
+}
+
+\begin{frame}
+  \frametitle{Goals}
+  \begin{itemize}
+  \item learn some diagramming basics
+    \pause
+  \item code $\rightarrow$ diagrams
+    \pause
+  \item diagrams $\rightarrow$ code
+    \pause
+  \item keep it simple but cover useful concepts
+  \end{itemize}
+  \pause
+  \hspace{3em}
+  \begin{displayquote}
+    the real treasure is the \acancelto<6->[red]{friends}{folds} we \acancelto<6->[red]{make}{learn} along the way
+  \end{displayquote}
+  \centerline{{\rm --- Jon Pretty}}
+\end{frame}
+
+\end{document}

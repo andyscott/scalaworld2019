@@ -2,8 +2,6 @@
 
 \begin{document}
 
-%%%%%%%%%%%%%%%%%%%%%%%%
-
 {
   \usebackgroundtemplate{
     \includegraphics[width=\paperwidth]{images/bg_title.jpg}%
@@ -15,64 +13,12 @@
   \usebackgroundtemplate{
     \includegraphics[width=\paperwidth]{images/bg_coffee.jpg}
   }
-  \begin{frame}
-    \frametitle{who am I?}
-    \begin{itemize}
-      \pause
-    \item contributor to a few Scala libs; maintainer of even fewer
-    \item fan of graphs, trees, recursive structures
-    \item also dogs, hiking, coffee, books, music
-    \item work on Scala \& Bazel at Stripe
-      \newline
-      \pause
-    \item \makebox[1.5cm]{github} \makebox[3.4cm]{https://github.com}/andyscott
-    \item \makebox[1.5cm]{twitter} \makebox[3.4cm]{https://twitter.com}/andy$\cdot{g}\cdot$scott
-    \end{itemize}
-  \end{frame}
+  \subfile{slide_about_me}
 }
 
-\tikzset{
-  main node/.style={inner sep=0,outer sep=0},
-  label node/.style={inner sep=0,outer ysep=.2em,outer xsep=.4em,font=\scriptsize,overlay},
-  strike out/.style={shorten <=-.2em,shorten >=-.5em,overlay}
-}
+\subfile{slide_goals}
 
-\newcommand<>{\acancelto}[3][]{
-  \tikz[baseline=(N.base)]{
-    \node[main node](N){$#2$};
-    \node#4[label node, #1, anchor=north west] at (N.south east){\only#4{$#3$}};
-    \draw#4[strike out,-latex,#1]  (N.north west) -- (N.south east);
-  }
-}
-
-\begin{frame}
-  \frametitle{Goals}
-  \begin{itemize}
-  \item learn some diagramming basics
-    \pause
-  \item code $\rightarrow$ diagrams
-    \pause
-  \item diagrams $\rightarrow$ code
-    \pause
-  \item keep it simple but cover useful concepts
-  \end{itemize}
-  \pause
-  \hspace{3em}
-  \begin{displayquote}
-    the real treasure is the \acancelto<6->[red]{friends}{folds} we \acancelto<6->[red]{make}{learn} along the way
-  \end{displayquote}
-  \centerline{{\rm --- Jon Pretty}}
-\end{frame}
-
-\begin{frame}
-  \begin{figure}
-    \begin{center}
-      \only<1>{\ldots}
-      \only<2->{\includegraphics[width=0.6\textwidth]{images/tupperware-shape-o.jpg}}
-    \end{center}
-    \uncover<3->{\caption{Tupperware Shape-O}}
-  \end{figure}
-\end{frame}
+\subfile{slide_shape_o}
 
 {
   \usebackgroundtemplate{
@@ -91,40 +37,13 @@
 
 \subfile{slide_recursion_schemes}
 
-\begin{frame}
-  \frametitle{things we learned}
-  \begin{itemize}
-    \pause
-  \item categories
-  \item commutative diagrams
-  \item folds in Scala
-    \newline
-    \pause
-  \item[] but also...
-    \newline
-    \pause
-  \item f-algebras
-    \pause
-  \item initial algebras
-    \pause
-  \item recursion schemes
-  \end{itemize}
-\end{frame}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subfile{slide_recap_final}
 
 {
   \usebackgroundtemplate{
     \includegraphics[width=\paperwidth]{images/bg_title.jpg}
   }
-  \begin{frame}
-    \begin{figure}
-      \begin{center}
-        \includegraphics[width=0.6\textwidth]{images/shapes-club.png}
-      \end{center}
-    \caption{questions?}
-    \end{figure}
-  \end{frame}
+  \subfile{slide_questions}
 }
 
 \end{document}
