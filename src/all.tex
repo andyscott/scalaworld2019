@@ -89,6 +89,8 @@
 
 \subfile{slide_list_fold}
 
+\subfile{slide_recursion_schemes}
+
 \begin{frame}
   \frametitle{things we learned}
   \begin{itemize}
@@ -109,8 +111,6 @@
   \end{itemize}
 \end{frame}
 
-\subfile{slide_recursion_schemes}
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 {
@@ -126,60 +126,5 @@
     \end{figure}
   \end{frame}
 }
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\begin{comment}
-
-\begin{frame}[fragile]
-  \begin{center}
-    \begin{tikzcd}[matrix scale=2.5]
-      A \arrow[rd, swap, "\only<2-4>{h}\only<6->{g \circ f}"] \arrow[r, "f"] & B \arrow[d, "g"] \\
-      & C
-    \end{tikzcd}
-    \pause
-    \pause
-    \newline
-    \newline
-    \begin{lstlisting}[style=scala, escapeinside=||]
-      def f(a: A): B = //...
-      def g(b: B): C = //...
-      def h(a: A): C = |\only<+>{???}\only<+>{g(???)}\only<+->{g(f(a))}|
-    \end{lstlisting}
-  \end{center}
-\end{frame}
-
-\begin{frame}
-  \begin{center}
-    \begin{tikzpicture}
-      \node {$A$} edge[loop above] (A);
-    \end{tikzpicture}
-  \end{center}
-\end{frame}
-
-
-\begin{frame}
-  \frametitle{Visual Learning}
-  \begin{displayquote}
-    Visual learning is a style in which a learner
-    utilizes graphs, charts, maps and diagrams.
-  \end{displayquote}
-  \rightline{{\rm --- Wikipedia}}
-\end{frame}
-
-\begin{frame}
-  \frametitle{Categories}
-  \begin{itemize}
-  \item roughly: a collection of objects, with arrows between them
-  \item restrictions
-    \begin{itemize}
-    \item identity arrow
-    \item composition
-    \end{itemize}
-  \end{itemize}
-\end{frame}
-
-\end{comment}
 
 \end{document}
