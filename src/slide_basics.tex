@@ -70,7 +70,8 @@ val y: Int = g(f(x)) // 15
       \node[anchor=north west, visible on=<7->] at (chunk1.south west) {
         \begin{minipage}{0.8\textwidth}
           \begin{lstlisting}[style=scala]
-val h = g _ compose f
+def h(x: List[String]): Int = g(f(x))
+// val h = g _ compose f
 val y: Int = h(x) // 15
           \end{lstlisting}
         \end{minipage}

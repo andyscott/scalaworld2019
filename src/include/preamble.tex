@@ -77,6 +77,19 @@
   }
 }
 
+\tikzset{zz/.style={
+    line join=round,
+    decorate,
+    decoration={
+      zigzag,
+      segment length=5,
+      amplitude=.7,
+      post=lineto,
+      post length=2pt
+    }
+  }
+}
+
 \newsavebox{\boxA}
 \newsavebox{\boxB}
 \newsavebox{\boxC}
