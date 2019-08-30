@@ -7,8 +7,26 @@
 }
 
 \begin{frame}[fragile]
+  \frametitle{Commutative Diagrams}
   \begin{center}
-    \frametitle{Commutative Diagram 101}
+    \begin{itemize}
+    \item
+      strongly rooted in math and category theory
+    \item
+      useful for showing/proving/checking laws e.g. functor identity
+    \item
+      often used for "diagram chasing" i.e. theorem proving
+      \pause
+      \vspace{1em}
+    \item[]
+      ... we're not going to cover any of that in this talk
+    \end{itemize}
+  \end{center}
+\end{frame}
+
+\begin{frame}[fragile]
+  \begin{center}
+    \frametitle{Commutative\only<11->{*} Diagram 101}
     \pgfmathdeclarefunction{toX}{1}{%
       \pgfmathparse{
         ((#1 + 125) * 2.2)
@@ -79,15 +97,24 @@
           $SEA \rightarrow ORD \rightarrow EDI \rightarrow \Laughey$
         };
       }
+
+      \only<11->{
+        \node[anchor=south east, align=right] at (topline1.north east) {
+          \textsubscript{* this diagram doesn't}
+          \\
+          \textsubscript{commute unless the category is trivial}
+          \\
+        };
+      }
       \node[anchor=north west] at (current bounding box.north west) {
         \begin{minipage}{0.5\textwidth}
           \vspace{0.5em}
           \begin{itemize}
           \item<2-> nodes (objects)
           \item<4-> edges (morphisms)
-          \item<6-> paths between nodes must
-            \newline give same result
           \item<10-> paths show composition
+          \item<10-> paths between two nodes must yield same result
+            \vspace{0.25em}
           \end{itemize}
         \end{minipage}
       };
