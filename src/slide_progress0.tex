@@ -48,7 +48,7 @@ def h(x: A): C = g(f(x))
       \\
       \\
       \pause
-      \tabitem{combine arrows} &
+      \tabitem{two arrows} &
       \begin{tikzpicture}[
           commutative diagrams/every diagram,
           baseline=(current bounding box.center)
@@ -85,7 +85,7 @@ def h(x: A): C = g(f(x))
         ]
         (m-1-1) edge["$f$"] (m-1-2)
         (m-2-1) edge["$g$"] (m-2-2)
-        (m-5-1) edge["$\lbrack{f, g}\rbrack$"] (m-5-2)
+        (m-5-1) edge["$\lbrack{f, g}\rbrack$", swap, dashed] (m-5-2)
         ;
         \node[anchor=north west, xshift=2em] at (m-2-1.base west) {
           \begin{minipage}{0.5\textwidth}

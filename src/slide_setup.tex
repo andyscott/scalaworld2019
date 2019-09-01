@@ -1,0 +1,170 @@
+\documentclass[include/preamble.tex]{subfiles}
+\begin{document}
+
+\begin{frame}[fragile]
+  \frametitle{from foldRight \only<2->{to hylo}}
+  \begin{center}
+    \begin{lstlisting}[style=scala]
+// foldRight just for list
+def foldRight[A, B](
+  la: List[A]
+)(z: B)(f: (A, B) => B): B =
+  la match {
+    case Nil => z
+    case head :: tail =>
+      f(head, foldRight(tail)(z)(f))
+  }
+    \end{lstlisting}
+    \pause
+    \begin{lstlisting}[style=scala]
+// 'foldRight' (and more) for any recursive data structure
+def hylo[F[_]: Functor, A, B](a: A)(
+  alg  : F[B] =>   B,
+  coalg:   A  => F[A]
+): B =
+  alg(coalg(a).map(hylo(_)(alg, coalg)))
+    \end{lstlisting}
+  \end{center}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{foldRight intuition}
+  \begin{center}
+    \begin{lstlisting}[style=scala]
+def foldRight[A, B](
+  la: List[A]
+)(z: B)(f: (A, B) => B): B = // ...
+
+val list0 = "hello" :: "scala" :: "world" :: Nil
+foldRight(list0)(1)(_.length + _)
+// 16
+    \end{lstlisting}
+    \pause
+    \begin{lstlisting}[style=scala]
+val list1 = ::("hello", ::("scala", ::("world", Nil)))
+foldRight(list1)(1)(_.length + _)
+// 16
+    \end{lstlisting}
+    \pause
+    \begin{lstlisting}[style=scala]
+val f: (String, Int) => Int = _.length + _
+f("hello", f("scala", f("world", 1)))
+f("hello", f("scala", 6))
+f("hello", 11)
+// 16
+    \end{lstlisting}
+  \end{center}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{list's initial algebra}
+  \begin{center}
+    \begin{tikzpicture}[commutative diagrams/every diagram]
+      \matrix[
+        matrix of math nodes,
+        matrix xscale=3,
+        matrix yscale=0.75,
+        nodes={scale=1.5},
+        name=m,
+        commutative diagrams/every cell,
+        nodes in empty cells
+      ] {
+        1
+        &
+        {List[A]}
+        \\
+        {A \times List[A]}
+        &
+        {List[A]}
+        \\
+        \\
+        \\
+        {1 + A \times List[A]}
+        &
+        {List[A]}
+        \\
+      };
+      \path[commutative diagrams/.cd, every arrow, every label]
+      (m-1-1) edge["$nil$"] (m-1-2)
+      (m-2-1) edge["$cons$"] (m-2-2)
+      (m-5-1) edge["$\lbrack{nil, cons}\rbrack$"] (m-5-2)
+      ;
+
+      \node[anchor=north west] at (m-5-1.west |- m-2-1.south) {
+        \begin{minipage}{\textwidth}
+          \begin{lstlisting}[style=scala]
+def empty[A]: List[A] = Nil
+def cons[A](head: A, tail: List[A]): List[A] =
+  head :: tail
+          \end{lstlisting}
+        \end{minipage}
+      };
+
+    \end{tikzpicture}
+  \end{center}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{lambek}
+  \begin{center}
+    \begin{tikzpicture}[commutative diagrams/every diagram]
+      \matrix[
+        matrix of math nodes,
+        matrix xscale=3,
+        matrix yscale=0.75,
+        nodes={scale=1.5},
+        name=m,
+        commutative diagrams/every cell,
+        nodes in empty cells
+      ] {
+        {1 + A \times List[A]}
+        &
+        {List[A]}
+        \\
+        \only<2->{1 + A \times List[A]}
+        &
+        \only<2->{List[A]}
+        \\
+        \only<3->{1 + A \times List[A]}
+        &
+        \only<3->{List[A]}
+        \\
+      };
+      \path[commutative diagrams/.cd, every arrow, every label]
+      (m-1-1) edge["$\lbrack{nil, cons}\rbrack$"] (m-1-2)
+      (m-2-2) edge["$\simeq$", <->, swap, visible on=<2->] (m-2-1)
+      (m-3-2) edge["$match$", zz, swap, visible on=<3->] (m-3-1)
+      ;
+    \end{tikzpicture}
+  \end{center}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{foldRight, a diagram}
+  \begin{center}
+    \begin{tikzpicture}[commutative diagrams/every diagram]
+      \matrix[
+        matrix of math nodes,
+        matrix xscale=3,
+        matrix yscale=3,
+        nodes={scale=1.5},
+        name=m,
+        commutative diagrams/every cell
+      ] {
+        {List[A]}
+        &
+        B
+        \\
+        {1 + A \times List[A]}
+        &
+        {1 + A \times B}
+        \\
+      };
+      \path[commutative diagrams/.cd, every arrow, every label]
+      %(m-5-1) edge["$\simeq$", <->, line width=1.3pt, visible on=<4->] (m-5-2)
+      ;
+    \end{tikzpicture}
+  \end{center}
+\end{frame}
+
+\end{document}
