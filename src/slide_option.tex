@@ -137,53 +137,13 @@ def right[A, B](b: B): Either[A, B] = Right(b)
   \begin{center}
     \begin{lstlisting}[style=scala]
 def fold[A, B](x: Option[A])
-              (ifEmpty: B)(f: A => B): B = ???
+              (ifEmpty: B)(f: A => B): B =
+  x match {
+    case None    => ifEmpty
+    case Some(a) => f(a)
+  }
     \end{lstlisting}
     \pause
-    \vspace{1em}
-    \begin{lstlisting}[style=scala]
-val x0  : Option[Int] = Some(2)
-val res0: Int         = x0.fold(0)(_ * 10)
-// 20
-
-val x1  : Option[Int] = None
-val res1: Int         = x1.fold(0)(_ * 10)
-// 0
-    \end{lstlisting}
-  \end{center}
-\end{frame}
-
-\begin{frame}[fragile]
-  \begin{center}
-    \begin{lstlisting}[style=scala]
-val x0  : Option[Int] = Some(2)
-val res0: Int         = x0.fold(0)(_ * 10)
-// 20
-
-val x1  : Option[Int] = None
-val res1: Int         = x1.fold(0)(_ * 10)
-// 0
-
-def fold[A, B](x: Option[A])
-              (ifEmpty: B)(f: A => B): B =
-  x match {
-    case None    => ifEmpty
-    case Some(a) => f(a)
-  }
-    \end{lstlisting}
-  \end{center}
-\end{frame}
-
-\begin{frame}[fragile]
-  \begin{center}
-    \begin{lstlisting}[style=scala]
-def fold[A, B](x: Option[A])
-              (ifEmpty: B)(f: A => B): B =
-  x match {
-    case None    => ifEmpty
-    case Some(a) => f(a)
-  }
-    \end{lstlisting}
     \begin{tikzcd}[matrix scale=2, nodes={scale=1.5}]
       {Option[A]} \arrow[rrr, "fold"] & & & B
       \\
