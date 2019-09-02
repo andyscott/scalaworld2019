@@ -62,15 +62,15 @@
 
       \node[c0] (pernith)    at (world cs:lat=54.649208,long=-2.755508)   {\Laughey[1.4]};
 
-      \node[c1] (manchester) at (world cs:lat=53.483959,long=-2.244644)   {MAN};
-      \node[c1] (amsterdam)  at (world cs:lat=52.370216,long=4.895168)    {AMS};
-      \node[c1] (edinburgh)  at (world cs:lat=55.953251,long=-3.188267)   {EDI};
+      \node[c1] (manchester) at (world cs:lat=53.483959,long=-2.244644)   {Manchester};
+      \node[c1] (amsterdam)  at (world cs:lat=52.370216,long=4.895168)    {Amsterdam};
+      \node[c1] (edinburgh)  at (world cs:lat=55.953251,long=-3.188267)   {Edinburgh};
 
-      \node[c2] (seattle)    at (world cs:lat=47.608013,long=-122.335167) {SEA\Strichmaxerl[1.4]};
-      \node[c2] (chicago)    at (world cs:lat=41.881832,long=-87.623177)  {ORD};
+      \node[c2] (seattle)    at (world cs:lat=47.608013,long=-122.335167) {Seattle\Strichmaxerl[1.4]};
+      \node[c2] (chicago)    at (world cs:lat=41.881832,long=-87.623177)  {Chicago};
 
       \path[commutative diagrams/.cd, every arrow, every label]
-      %(pernith) edge[loop right] (pernith)
+      (seattle)    edge[dashed, commutative diagrams/bend left=11, visible on=<9->] (pernith)
       ;
       \only<5->{
         \path[commutative diagrams/.cd, every arrow, every label]
@@ -87,14 +87,14 @@
         (chicago)    edge[commutative diagrams/bend left=15] (edinburgh);
       }
       \only<8->{
-        \node[anchor=south east] (botline1) at (current bounding box.south east) {
-          \only<9->{$SEA \rightarrow \Laughey$}
+        \node[anchor=south east, visible on=<9->] (botline1) at (current bounding box.south east) {
+          $Seattle \rightarrow \Laughey$
         };
         \node[anchor=south east] (midline1) at (botline1.north east) {
-          $SEA \rightarrow AMS \rightarrow MAN \rightarrow \Laughey$
+          $Seattle \rightarrow Amsterdam \rightarrow Manchester \rightarrow \Laughey$
         };
         \node[anchor=south east] (topline1) at (midline1.north east) {
-          $SEA \rightarrow ORD \rightarrow EDI \rightarrow \Laughey$
+          $Seattle \rightarrow Chicago \rightarrow Edinburgh \rightarrow \Laughey$
         };
       }
 

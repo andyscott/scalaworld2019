@@ -2,7 +2,7 @@
 \begin{document}
 
 \begin{frame}[fragile]
-  \frametitle{Optional Values}
+  \frametitle{Folding Option}
   \begin{center}
     \begin{tikzpicture}[commutative diagrams/every diagram]
       \matrix[
@@ -95,7 +95,7 @@ def right[A, B](b: B): Either[A, B] = Right(b)
 
 
 \begin{frame}[fragile]
-  \frametitle{Optional Values}
+  \frametitle{Folding Option}
   \begin{center}
     \begin{tikzpicture}[commutative diagrams/every diagram]
       \matrix[
@@ -191,7 +191,7 @@ def fold[A, B](x: Option[A])
     case Some(a) => f(a)
   }
     \end{lstlisting}
-    \begin{tikzcd}[matrix scale=1, nodes={scale=1}]
+    \begin{tikzcd}[matrix scale=2, nodes={scale=1.5}]
       {Option[A]} \arrow[rrr, "fold"] & & & B
       \\
       1 \arrow[rrr, "ifEmpty"] & & & B
@@ -211,7 +211,7 @@ def fold[A, B](x: Option[A])
     case Some(a) => f(a)
   }
     \end{lstlisting}
-    \begin{tikzcd}[matrix scale=1, nodes={scale=1}]
+    \begin{tikzcd}[matrix scale=2, nodes={scale=1.5}]
       {Option[A]} \arrow[rrr, "fold"] & & & B
       \\
       1 + A \arrow[rrr, "\lbrack {ifEmpty, f} \rbrack"] & & & B
@@ -229,7 +229,7 @@ def fold[A, B](x: Option[A])
     case Some(a) => f(a)
   }
     \end{lstlisting}
-    \begin{tikzcd}[matrix scale=1, nodes={scale=1}]
+    \begin{tikzcd}[matrix scale=2, nodes={scale=1.5}]
       {Option[A]}
       \arrow[rr, "fold"]
       \arrow[rd, swap, "match", visible on=<2->]
