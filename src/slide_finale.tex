@@ -39,7 +39,7 @@ val z: Int = 0
 val f: (String, Int) => Int = _.length + _
 
 foldRight(input)(z)(f)
-// 16
+// 15
     \end{lstlisting}
     \pause
     \hrulefill
@@ -51,7 +51,7 @@ def alg: Option[(String, Int)] => Int =
   }
 
 hylo(input)(alg, unpackList)
-// 16
+// 15
     \end{lstlisting}
   \end{center}
 \end{frame}
@@ -80,13 +80,13 @@ def foldRight[A, B](
 val list0 = "hello" :: "scala" :: "world" :: Nil
 val f: (String, Int) => Int = _.length + _
 foldRight(list0)(1)(f)
-// 16
+// 15
     \end{lstlisting}
     \pause
     \begin{lstlisting}[style=scala]
 val list1 = ::("hello", ::("scala", ::("world", Nil)))
 foldRight(list1)(1)(f)
-// 16
+// 15
     \end{lstlisting}
   \end{center}
 \end{frame}
@@ -101,19 +101,19 @@ foldRight(list1)(1)(f)
     \pause
     \vspace{1em}
     \begin{lstlisting}[style=scala]
- f("hello",  f("scala",  f("world", 1)))   // 16
+ f("hello",  f("scala",  f("world", 0)))   // 15
     \end{lstlisting}
     \pause
     \begin{lstlisting}[style=scala]
- f("hello",  f("scala",  6))               // 16
+ f("hello",  f("scala",  5))               // 15
     \end{lstlisting}
     \pause
     \begin{lstlisting}[style=scala]
- f("hello",  11)                           // 16
+ f("hello",  10)                           // 15
     \end{lstlisting}
     \pause
     \begin{lstlisting}[style=scala]
- 16                                        // 16 :)
+ 15                                        // 15 :)
     \end{lstlisting}
     \pause
     \vspace{1em}
@@ -121,7 +121,7 @@ foldRight(list1)(1)(f)
  f(list.head,                // "hello".length +
    f(list.tail.head,         // "scala".length +
      f(list.tail.tail.head,  // "world".length +
-       1)))                  // 1
+       0)))                  // 0
     \end{lstlisting}
   \end{center}
 \end{frame}
@@ -480,7 +480,7 @@ def hylo[F[_]: Functor, A, B](a: A)(
 val input = List("hello", "scala", "world")
 val f: (String, Int) => Int = _.length + _
 
-foldRight(input)(1)(f) // 16
+foldRight(input)(0)(f) // 15
     \end{lstlisting}
   \end{center}
 \end{frame}
@@ -499,11 +499,11 @@ val unpackList: List[String] => Option[(String, List[String])] =
 
 val alg: Option[(String, Int)] => Int =
   _ match {
-    case None              => 1
+    case None              => 0
     case Some((head, acc)) => head.length + acc
   }
 
-hylo(input)(alg, unpackList) // 16
+hylo(input)(alg, unpackList) // 15
     \end{lstlisting}
   \end{center}
 \end{frame}
@@ -512,19 +512,16 @@ hylo(input)(alg, unpackList) // 16
   \frametitle{hylo intuition}
   \begin{center}
     \begin{lstlisting}[style=scala]
-val list = ::("hello", ::("scala", ::("world", Nil)))
-val f: (String, Int) => Int = _.length + _
-
 f(list.head,                // "hello".length +
   f(list.tail.head,         // "scala".length +
     f(list.tail.tail.head,  // "world".length +
-      1)))                  // 1
+      z)))                  // 0
     \end{lstlisting}
     \begin{lstlisting}[style=scala]
 alg(coalg(list).fmap(ist => // "hello".length +
   alg(coalg(ist).fmap(st => // "scala".length +
     alg(coalg(st).fmap(t => // "world".length +
-      alg(coalg(t).map(_ => // 1
+      alg(coalg(t).map(_ => // 0
         ???))))))))
     \end{lstlisting}
   \end{center}
