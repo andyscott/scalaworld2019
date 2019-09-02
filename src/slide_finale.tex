@@ -127,7 +127,7 @@ foldRight(list1)(1)(f)
 \end{frame}
 
 \begin{frame}[fragile]
-  \frametitle{list's initial algebra}
+  \frametitle{creating/unpacking lists}
   \begin{center}
     \begin{tikzpicture}[commutative diagrams/every diagram]
       \matrix[
@@ -153,11 +153,16 @@ foldRight(list1)(1)(f)
         &
         {List[A]}
         \\
+        {1 + A \times List[A]}
+        &
+        {List[A]}
+        \\
       };
       \path[commutative diagrams/.cd, every arrow, every label]
       (m-1-1) edge["$nil$"] (m-1-2)
       (m-2-1) edge["$cons$"] (m-2-2)
       (m-5-1) edge["$\lbrack{nil, cons}\rbrack$"] (m-5-2)
+      (m-6-2) edge["$match$", swap, zz] (m-6-1)
       ;
 
       \node[anchor=north west] at (m-5-1.west |- m-2-1.south) {
