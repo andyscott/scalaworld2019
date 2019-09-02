@@ -163,7 +163,7 @@ foldRight(list1)(1)(f)
       \node[anchor=north west] at (m-5-1.west |- m-2-1.south) {
         \begin{minipage}{\textwidth}
           \begin{lstlisting}[style=scala]
-def empty[A]: List[A] = Nil
+def nil[A]: List[A] = Nil
 def cons[A](head: A, tail: List[A]): List[A] =
   head :: tail
           \end{lstlisting}
