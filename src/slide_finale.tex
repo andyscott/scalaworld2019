@@ -302,7 +302,7 @@ def foldRight[A, B](la: List[A])
       (m-2-1) edge["$\lbrack{z, f}\rbrack$", visible on=<5>] (m-2-2)
       (m-3-2) edge["$\lbrack{z, f}\rbrack$", swap, visible on=<6->] (m-1-2)
       (m-1-1) edge["$match$", swap, zz, visible on=<7->] (m-3-1)
-      (m-3-1) edge["$id + ...$", swap, zz, visible on=<8>] (m-3-2)
+      (m-3-1) edge["$id + ...$", swap, visible on=<8>] (m-3-2)
       (m-3-1) edge["$id + id \times ...$", swap, visible on=<9>] (m-3-2)
       (m-3-1) edge["$id + id \times foldRight$", swap, visible on=<10>] (m-3-2)
       ;

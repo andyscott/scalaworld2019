@@ -1,0 +1,54 @@
+\documentclass[include/preamble.tex]{subfiles}
+\begin{document}
+
+\begin{frame}[fragile]
+  \frametitle{Outline}
+  \begin{center}
+    \begin{tikzpicture}[
+        commutative diagrams/every diagram,
+        baseline=(current bounding box.center)
+      ]
+      \matrix[
+        matrix of math nodes,
+        matrix xscale=1,
+        matrix yscale=0.5,
+        nodes={scale=1},
+        name=m,
+        commutative diagrams/every cell
+      ] {
+        \textrm{Start}
+        \\
+        \textrm{Intro}
+        \\
+        \textrm{Simple Diagrams}
+        \\
+        \textrm{Either}
+        \\
+        \textrm{Option}
+        \\
+        \textrm{List, foldRight}
+        \\
+        \textrm{List, hylo}
+        \\
+        \textrm{End}
+        \\
+      };
+      \path[
+        commutative diagrams/.cd,
+        every arrow,
+        every label,
+        font=\large,
+      ]
+      (m-1-1) edge (m-2-1)
+      (m-2-1) edge (m-3-1)
+      (m-3-1) edge (m-4-1)
+      (m-4-1) edge (m-5-1)
+      (m-5-1) edge (m-6-1)
+      (m-6-1) edge (m-7-1)
+      (m-7-1) edge (m-8-1)
+      ;
+    \end{tikzpicture}
+  \end{center}
+\end{frame}
+
+\end{document}
