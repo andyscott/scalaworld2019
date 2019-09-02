@@ -4,68 +4,20 @@
 \tikzstyle{showborder}=[draw=black]
 
 \begin{frame}[fragile]
-  \frametitle{from foldRight \only<2->{to hylo}}
+  \frametitle{List foldRight}
   \begin{center}
     \begin{lstlisting}[style=scala]
-// foldRight just for list
-def foldRight[A, B](
-  la: List[A]
-)(z: B)(f: (A, B) => B): B = la match {
-  case Nil => z
-  case head :: tail => f(head, foldRight(tail)(z)(f))
-}
-    \end{lstlisting}
-    \pause
-    \hrulefill
-    \begin{lstlisting}[style=scala]
-// 'foldRight' (and lots more)
-// for any recursive data structure
-def hylo[F[_]: Functor, A, B](a: A)(
-  alg  : F[B] =>   B,
-  coalg:   A  => F[A]
-): B =
-  alg(coalg(a).map(hylo(_)(alg, coalg)))
-    \end{lstlisting}
-  \end{center}
-\end{frame}
-
-\begin{frame}[fragile]
-  \frametitle{from foldRight to hylo}
-  \begin{center}
-    \begin{lstlisting}[style=scala]
-val input = List("hello", "scala", "world")
-
-val z: Int = 0
-val f: (String, Int) => Int = _.length + _
-
-foldRight(input)(z)(f)
-// 15
-    \end{lstlisting}
-    \pause
-    \hrulefill
-    \begin{lstlisting}[style=scala]
-def alg: Option[(String, Int)] => Int =
-  _ match {
-    case None => 1
-    case Some((head, acc)) => head.length + acc
+def foldRight[A, B](la: List[A])
+  (z: B)(f: (A, B) => B): B = la match {
+    case Nil => z
+    case head :: tail => f(head, foldRight(tail)(z)(f))
   }
 
-hylo(input)(alg, coalg) // coalg unpacks a list
+val list = "hello" :: "scala" :: "world" :: Nil
+val f: (String, Int) => Int = _.length + _
+foldRight(list)(0)(f)
 // 15
     \end{lstlisting}
-  \end{center}
-\end{frame}
-
-\begin{frame}[fragile]
-  \frametitle{from foldRight to hylo}
-  \begin{center}
-    \begin{itemize}
-    \item
-      We're not going to prove anything
-    \item
-      We're just going to use our understanding of Scala and
-      foldRight to gain intuition for how recursion schemes work.
-    \end{itemize}
   \end{center}
 \end{frame}
 
@@ -183,13 +135,13 @@ def foldRight[A, B](
 
 val list0 = "hello" :: "scala" :: "world" :: Nil
 val f: (String, Int) => Int = _.length + _
-foldRight(list0)(1)(f)
+foldRight(list0)(0)(f)
 // 15
     \end{lstlisting}
     \pause
     \begin{lstlisting}[style=scala]
 val list1 = ::("hello", ::("scala", ::("world", Nil)))
-foldRight(list1)(1)(f)
+foldRight(list1)(0)(f)
 // 15
     \end{lstlisting}
   \end{center}
@@ -227,6 +179,72 @@ foldRight(list1)(1)(f)
      f(list.tail.tail.head,  // "world".length +
        0)))                  // 0
     \end{lstlisting}
+  \end{center}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{from foldRight \only<2->{to hylo}}
+  \begin{center}
+    \begin{lstlisting}[style=scala]
+// foldRight just for list
+def foldRight[A, B](
+  la: List[A]
+)(z: B)(f: (A, B) => B): B = la match {
+  case Nil => z
+  case head :: tail => f(head, foldRight(tail)(z)(f))
+}
+    \end{lstlisting}
+    \pause
+    \hrulefill
+    \begin{lstlisting}[style=scala]
+// 'foldRight' (and lots more)
+// for any recursive data structure
+def hylo[F[_]: Functor, A, B](a: A)(
+  alg  : F[B] =>   B,
+  coalg:   A  => F[A]
+): B =
+  alg(coalg(a).map(hylo(_)(alg, coalg)))
+    \end{lstlisting}
+  \end{center}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{from foldRight to hylo}
+  \begin{center}
+    \begin{lstlisting}[style=scala]
+val input = List("hello", "scala", "world")
+
+val z: Int = 0
+val f: (String, Int) => Int = _.length + _
+
+foldRight(input)(z)(f)
+// 15
+    \end{lstlisting}
+    \pause
+    \hrulefill
+    \begin{lstlisting}[style=scala]
+def alg: Option[(String, Int)] => Int =
+  _ match {
+    case None => 1
+    case Some((head, acc)) => head.length + acc
+  }
+
+hylo(input)(alg, coalg) // coalg unpacks a list
+// 15
+    \end{lstlisting}
+  \end{center}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{from foldRight to hylo}
+  \begin{center}
+    \begin{itemize}
+    \item
+      We're not going to prove anything
+    \item
+      We're just going to use our understanding of Scala and
+      foldRight to gain intuition for how recursion schemes work.
+    \end{itemize}
   \end{center}
 \end{frame}
 
