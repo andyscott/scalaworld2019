@@ -2,6 +2,60 @@
 \begin{document}
 
 \begin{frame}[fragile]
+  \frametitle{hylo intuition}
+  \begin{center}
+    \begin{lstlisting}[style=scala]
+val input = List("hello", "scala", "world")
+val f: (String, Int) => Int = _.length + _
+
+foldRight(input)(0)(f) // 15
+    \end{lstlisting}
+  \end{center}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{hylo intuition}
+  \begin{center}
+    \begin{lstlisting}[style=scala]
+val input = List("hello", "scala", "world")
+
+val unpackList: List[String] => Option[(String, List[String])] =
+  _ match {
+    case Nil          => None
+    case head :: tail => Some((head, tail))
+  }
+
+val alg: Option[(String, Int)] => Int =
+  _ match {
+    case None              => 0
+    case Some((head, acc)) => head.length + acc
+  }
+
+hylo(input)(alg, unpackList) // 15
+    \end{lstlisting}
+  \end{center}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{hylo intuition}
+  \begin{center}
+    \begin{lstlisting}[style=scala]
+f(list.head,                // "hello".length +
+  f(list.tail.head,         // "scala".length +
+    f(list.tail.tail.head,  // "world".length +
+      z)))                  // 0
+    \end{lstlisting}
+    \begin{lstlisting}[style=scala]
+alg(coalg(list).fmap(ist => // "hello".length +
+  alg(coalg(ist).fmap(st => // "scala".length +
+    alg(coalg(st).fmap(t => // "world".length +
+      alg(coalg(t).map(_ => // 0
+        ???))))))))
+    \end{lstlisting}
+  \end{center}
+\end{frame}
+
+\begin{frame}[fragile]
   \frametitle{List foldRight \& hylo}
   \begin{flushleft}
     \begin{tikzpicture}[commutative diagrams/every diagram]
