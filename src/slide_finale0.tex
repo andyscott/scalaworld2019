@@ -50,7 +50,7 @@ def alg: Option[(String, Int)] => Int =
     case Some((head, acc)) => head.length + acc
   }
 
-hylo(input)(alg, unpackList)
+hylo(input)(alg, coalg) // coalg unpacks a list
 // 15
     \end{lstlisting}
   \end{center}
