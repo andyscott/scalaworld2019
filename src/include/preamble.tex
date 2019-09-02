@@ -77,6 +77,13 @@
   }
 }
 
+\tikzset{onslide/.code args={<#1>#2}{%
+  \only<#1>{\pgfkeysalso{#2}}
+}}
+\tikzset{temporal/.code args={<#1>#2#3#4}{%
+  \temporal<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}}{\pgfkeysalso{#4}}
+}}
+
 \tikzset{zz/.style={
     line join=round,
     decorate,
@@ -109,3 +116,4 @@
 \usenavigationsymbolstemplate{}
 \usetikzlibrary{shapes.multipart}
 \usetikzlibrary{calc}
+\usetikzlibrary{shapes.misc}

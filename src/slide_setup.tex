@@ -1,6 +1,8 @@
 \documentclass[include/preamble.tex]{subfiles}
 \begin{document}
 
+\tikzstyle{showborder}=[draw=black]
+
 \begin{frame}[fragile]
   \frametitle{from foldRight \only<2->{to hylo}}
   \begin{center}
@@ -105,8 +107,32 @@ def cons[A](head: A, tail: List[A]): List[A] =
 \end{frame}
 
 \begin{frame}[fragile]
-  \frametitle{lambek}
+  \frametitle{Lambek's Lemma}
   \begin{center}
+    \newcommand*{\empha}[1]{
+      \tikz[
+        baseline,
+        outer sep=0pt, inner sep = 1pt,
+        nodes={scale=0.75}
+      ]
+      \node[
+        rounded rectangle,
+        onslide=<3->{showborder},
+        anchor=text
+      ]{#1};
+    }
+    \newcommand*{\emphf}[1]{
+      \tikz[
+        baseline,
+        outer sep=0pt, inner sep = 1pt,
+        nodes={scale=0.75}
+      ]
+      \node[
+        rectangle,
+        onslide=<4->{showborder},
+        anchor=text
+      ]{#1};
+    }
     \begin{tikzpicture}[commutative diagrams/every diagram]
       \matrix[
         matrix of math nodes,
@@ -117,51 +143,162 @@ def cons[A](head: A, tail: List[A]): List[A] =
         commutative diagrams/every cell,
         nodes in empty cells
       ] {
-        {1 + A \times List[A]}
+        \emphf{$1 + A \times \empha{List[A]}$}
         &
-        {List[A]}
-        \\
-        \only<2->{1 + A \times List[A]}
-        &
-        \only<2->{List[A]}
-        \\
-        \only<3->{1 + A \times List[A]}
-        &
-        \only<3->{List[A]}
+        \empha{${List[A]}$}
         \\
       };
       \path[commutative diagrams/.cd, every arrow, every label]
       (m-1-1) edge["$\lbrack{nil, cons}\rbrack$"] (m-1-2)
-      (m-2-2) edge["$\simeq$", <->, swap, visible on=<2->] (m-2-1)
-      (m-3-2) edge["$match$", zz, swap, visible on=<3->] (m-3-1)
+      ;
+    \end{tikzpicture}
+    \visible<2->{
+      \begin{lemma}[Lambek]
+        any initial algebra $F[\alpha] => \alpha$ is an isomorphism
+      \end{lemma}
+    }
+    \begin{lrbox}{\boxA}
+      \begin{tikzpicture}[commutative diagrams/every diagram]
+        \matrix[
+          matrix of math nodes,
+          matrix xscale=3,
+          matrix yscale=0.75,
+          nodes={scale=1.5},
+          name=m,
+          commutative diagrams/every cell,
+          nodes in empty cells
+        ] {
+          \only<2->{1 + A \times List[A]}
+          &
+          \only<2->{List[A]}
+          \\
+          \only<3->{1 + A \times List[A]}
+          &
+          \only<3->{List[A]}
+          \\
+        };
+        \path[commutative diagrams/.cd, every arrow, every label]
+        (m-1-2) edge["$\simeq$", <->, swap, visible on=<2->] (m-1-1)
+        (m-2-2) edge[visible on=<3>] (m-2-1)
+        (m-2-2) edge["$match$", zz, swap, visible on=<4->] (m-2-1)
+        ;
+      \end{tikzpicture}
+    \end{lrbox}
+    \vspace{1em}
+    \uncover<5->{
+      \usebox{\boxA}
+    }
+  \end{center}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{foldRight diagram}
+  \begin{center}
+    \begin{lstlisting}[style=scala]
+def foldRight[A, B](la: List[A])
+  (z: B)(f: (A, B) => B): B = la match {
+    case Nil => z
+    case head :: tail => f(head, foldRight(tail)(z)(f))
+  }
+    \end{lstlisting}
+    \pause
+    \begin{tikzpicture}[commutative diagrams/every diagram]
+      \matrix[
+        matrix of math nodes,
+        matrix xscale=3,
+        matrix yscale=1.25,
+        nodes={scale=1.5},
+        name=m,
+        commutative diagrams/every cell
+      ] {
+        \only<2->{List[A]}
+        &
+        \only<2->{B}
+        \\
+        \only<3-4>{1}
+        \only<5>{1 + A \times B}
+        &
+        \only<3-5>{B}
+        \\
+        \only<4>{A \times B}
+        \only<7->{1 + A \times List[A]}
+        &
+        \only<4>{B}
+        \only<6->{1 + A \times B}
+        \\
+      };
+      \path[commutative diagrams/.cd, every arrow, every label]
+      (m-1-1) edge["$foldRight$", visible on=<2->] (m-1-2)
+      (m-2-1) edge["$z$", visible on=<3-4>] (m-2-2)
+      (m-3-1) edge["$f$", visible on=<4>] (m-3-2)
+      (m-2-1) edge["$\lbrack{z, f}\rbrack$", visible on=<5>] (m-2-2)
+      (m-3-2) edge["$\lbrack{z, f}\rbrack$", swap, visible on=<6->] (m-1-2)
+      (m-1-1) edge["$match$", swap, zz, visible on=<7->] (m-3-1)
+      (m-3-1) edge["$id + ...$", swap, zz, visible on=<8>] (m-3-2)
+      (m-3-1) edge["$id + id \times ...$", swap, zz, visible on=<9>] (m-3-2)
+      (m-3-1) edge["$id + id \times foldRight$", swap, visible on=<10>] (m-3-2)
       ;
     \end{tikzpicture}
   \end{center}
 \end{frame}
 
+
 \begin{frame}[fragile]
-  \frametitle{foldRight, a diagram}
+  \frametitle{reshaping foldRight}
+  \newcommand*{\empha}[1]{
+    \tikz[
+      baseline,
+      outer sep=0pt, inner sep = 2pt
+    ]
+    \node[
+      rectangle,
+      onslide=<2>{showborder},
+      anchor=text
+    ]{#1};
+  }
+  \newcommand*{\emphf}[1]{
+    \tikz[
+      baseline,
+      outer sep=0pt, inner sep = 2pt
+    ]
+    \node[
+      rounded rectangle,
+      onslide=<2>{showborder},
+      anchor=text
+    ]{#1};
+  }
   \begin{center}
     \begin{tikzpicture}[commutative diagrams/every diagram]
       \matrix[
         matrix of math nodes,
-        matrix xscale=3,
-        matrix yscale=3,
-        nodes={scale=1.5},
+        matrix xscale=4,
+        matrix yscale=4,
+        nodes={scale=1},
         name=m,
         commutative diagrams/every cell
       ] {
-        {List[A]}
+        \only<-4>{\empha{$List[A]$}}
+        \only<5->{A}
         &
         B
         \\
-        {1 + A \times List[A]}
+        \only<-3>{\emphf{$1 + A \times \empha{List[A]}$}}
+        \only<4>{F[List[A]]}
+        \only<5->{F[A]}
         &
-        {1 + A \times B}
+        \only<-3>{\emphf{$1 + A \times \empha{B}$}}
+        \only<4->{F[B]}
         \\
       };
       \path[commutative diagrams/.cd, every arrow, every label]
-      %(m-5-1) edge["$\simeq$", <->, line width=1.3pt, visible on=<4->] (m-5-2)
+      (m-1-1) edge["$foldRight$", visible on=<-5>] (m-1-2)
+      (m-1-1) edge["$cata$", visible on=<6->] (m-1-2)
+      (m-1-1) edge["$match$", swap, zz, visible on=<-8>] (m-2-1)
+      (m-1-1) edge["$unFix$", swap, visible on=<9->] (m-2-1)
+      (m-2-2) edge["$\lbrack{z, f}\rbrack$", swap, visible on=<-7>] (m-1-2)
+      (m-2-2) edge["$algebra$", swap, visible on=<8->] (m-1-2)
+      (m-2-1) edge["$id + id \times foldRight$", swap, visible on=<-6>] (m-2-2)
+      (m-2-1) edge["$map\ cata$", swap, visible on=<7->] (m-2-2)
       ;
     \end{tikzpicture}
   \end{center}
