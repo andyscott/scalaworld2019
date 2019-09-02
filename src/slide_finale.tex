@@ -10,22 +10,62 @@
 // foldRight just for list
 def foldRight[A, B](
   la: List[A]
-)(z: B)(f: (A, B) => B): B =
-  la match {
-    case Nil => z
-    case head :: tail =>
-      f(head, foldRight(tail)(z)(f))
-  }
+)(z: B)(f: (A, B) => B): B = la match {
+  case Nil => z
+  case head :: tail => f(head, foldRight(tail)(z)(f))
+}
     \end{lstlisting}
     \pause
+    \hrulefill
     \begin{lstlisting}[style=scala]
-// 'foldRight' (and more) for any recursive data structure
+// 'foldRight' (and lots more)
+// for any recursive data structure
 def hylo[F[_]: Functor, A, B](a: A)(
   alg  : F[B] =>   B,
   coalg:   A  => F[A]
 ): B =
   alg(coalg(a).map(hylo(_)(alg, coalg)))
     \end{lstlisting}
+  \end{center}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{from foldRight to hylo}
+  \begin{center}
+    \begin{lstlisting}[style=scala]
+val input = List("hello", "scala", "world")
+
+val z: Int = 0
+val f: (String, Int) => Int = _.length + _
+
+foldRight(input)(z)(f)
+// 16
+    \end{lstlisting}
+    \pause
+    \hrulefill
+    \begin{lstlisting}[style=scala]
+def alg: Option[(String, Int)] => Int =
+  _ match {
+    case None => 1
+    case Some((head, acc)) => head.length + acc
+  }
+
+hylo(input)(alg, unpackList)
+// 16
+    \end{lstlisting}
+  \end{center}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{from foldRight to hylo}
+  \begin{center}
+    \begin{itemize}
+    \item
+      We're not going to prove anything
+    \item
+      We're just going to use our understanding of Scala and
+      foldRight to gain intuition for how recursion schemes work.
+    \end{itemize}
   \end{center}
 \end{frame}
 
@@ -38,22 +78,50 @@ def foldRight[A, B](
 )(z: B)(f: (A, B) => B): B = // ...
 
 val list0 = "hello" :: "scala" :: "world" :: Nil
-foldRight(list0)(1)(_.length + _)
+val f: (String, Int) => Int = _.length + _
+foldRight(list0)(1)(f)
 // 16
     \end{lstlisting}
     \pause
     \begin{lstlisting}[style=scala]
 val list1 = ::("hello", ::("scala", ::("world", Nil)))
-foldRight(list1)(1)(_.length + _)
+foldRight(list1)(1)(f)
 // 16
+    \end{lstlisting}
+  \end{center}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{foldRight intuition}
+  \begin{center}
+    \lstset{aboveskip=0pt,belowskip=0pt}
+    \begin{lstlisting}[style=scala]
+::("hello", ::("scala", ::("world", Nil))) // list1
+    \end{lstlisting}
+    \pause
+    \vspace{1em}
+    \begin{lstlisting}[style=scala]
+ f("hello",  f("scala",  f("world", 1)))   // 16
     \end{lstlisting}
     \pause
     \begin{lstlisting}[style=scala]
-val f: (String, Int) => Int = _.length + _
-f("hello", f("scala", f("world", 1)))
-f("hello", f("scala", 6))
-f("hello", 11)
-// 16
+ f("hello",  f("scala",  6))               // 16
+    \end{lstlisting}
+    \pause
+    \begin{lstlisting}[style=scala]
+ f("hello",  11)                           // 16
+    \end{lstlisting}
+    \pause
+    \begin{lstlisting}[style=scala]
+ 16                                        // 16 :)
+    \end{lstlisting}
+    \pause
+    \vspace{1em}
+    \begin{lstlisting}[style=scala]
+ f(list.head,                // "hello".length +
+   f(list.tail.head,         // "scala".length +
+     f(list.tail.tail.head,  // "world".length +
+       1)))                  // 1
     \end{lstlisting}
   \end{center}
 \end{frame}
@@ -235,7 +303,7 @@ def foldRight[A, B](la: List[A])
       (m-3-2) edge["$\lbrack{z, f}\rbrack$", swap, visible on=<6->] (m-1-2)
       (m-1-1) edge["$match$", swap, zz, visible on=<7->] (m-3-1)
       (m-3-1) edge["$id + ...$", swap, zz, visible on=<8>] (m-3-2)
-      (m-3-1) edge["$id + id \times ...$", swap, zz, visible on=<9>] (m-3-2)
+      (m-3-1) edge["$id + id \times ...$", swap, visible on=<9>] (m-3-2)
       (m-3-1) edge["$id + id \times foldRight$", swap, visible on=<10>] (m-3-2)
       ;
     \end{tikzpicture}
@@ -245,7 +313,19 @@ def foldRight[A, B](la: List[A])
 
 \begin{frame}[fragile]
   \frametitle{reshaping foldRight}
-  \newcommand*{\empha}[1]{
+  \newcommand*{\emphaa}[1]{
+    \tikz[
+      baseline,
+      outer sep=0pt, inner sep = 2pt
+    ]
+    \node[
+      rectangle,
+      onslide=<2>{showborder},
+      anchor=text,
+      nodes={scale=0.8},
+    ]{#1};
+  }
+  \newcommand*{\emphab}[1]{
     \tikz[
       baseline,
       outer sep=0pt, inner sep = 2pt
@@ -259,7 +339,8 @@ def foldRight[A, B](la: List[A])
   \newcommand*{\emphf}[1]{
     \tikz[
       baseline,
-      outer sep=0pt, inner sep = 2pt
+      outer sep=0pt, inner sep = 2pt,
+      nodes={scale=0.8},
     ]
     \node[
       rounded rectangle,
@@ -271,36 +352,181 @@ def foldRight[A, B](la: List[A])
     \begin{tikzpicture}[commutative diagrams/every diagram]
       \matrix[
         matrix of math nodes,
-        matrix xscale=4,
-        matrix yscale=4,
-        nodes={scale=1},
+        matrix xscale=3,
+        matrix yscale=3,
+        nodes={scale=1.25},
         name=m,
         commutative diagrams/every cell
       ] {
-        \only<-4>{\empha{$List[A]$}}
+        \only<-4>{\emphaa{$List[A]$}}
         \only<5->{A}
         &
         B
         \\
-        \only<-3>{\emphf{$1 + A \times \empha{List[A]}$}}
+        \only<-3>{\emphf{$1 + A \times \emphab{List[A]}$}}
         \only<4>{F[List[A]]}
         \only<5->{F[A]}
         &
-        \only<-3>{\emphf{$1 + A \times \empha{B}$}}
+        \only<-3>{\emphf{$1 + A \times \emphab{B}$}}
         \only<4->{F[B]}
         \\
       };
       \path[commutative diagrams/.cd, every arrow, every label]
       (m-1-1) edge["$foldRight$", visible on=<-5>] (m-1-2)
-      (m-1-1) edge["$cata$", visible on=<6->] (m-1-2)
+      (m-1-1) edge["$hylo$", visible on=<6->] (m-1-2)
       (m-1-1) edge["$match$", swap, zz, visible on=<-8>] (m-2-1)
-      (m-1-1) edge["$unFix$", swap, visible on=<9->] (m-2-1)
+      (m-1-1) edge["$coalgebra$", swap, visible on=<9->] (m-2-1)
       (m-2-2) edge["$\lbrack{z, f}\rbrack$", swap, visible on=<-7>] (m-1-2)
       (m-2-2) edge["$algebra$", swap, visible on=<8->] (m-1-2)
       (m-2-1) edge["$id + id \times foldRight$", swap, visible on=<-6>] (m-2-2)
-      (m-2-1) edge["$map\ cata$", swap, visible on=<7->] (m-2-2)
+      (m-2-1) edge["$map\ hylo$", swap, visible on=<7->] (m-2-2)
       ;
     \end{tikzpicture}
+  \end{center}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{hylo}
+  \begin{center}
+    \begin{tikzpicture}[commutative diagrams/every diagram]
+      \matrix[
+        matrix of math nodes,
+        matrix xscale=3,
+        matrix yscale=3,
+        nodes={scale=1.5},
+        name=m,
+        commutative diagrams/every cell
+      ] {
+        A
+        &
+        B
+        \\
+        {F[A]}
+        &
+        {F[B]}
+        \\
+      };
+      \path[commutative diagrams/.cd, every arrow, every label]
+      (m-1-1) edge["$hylo$"] (m-1-2)
+      (m-1-1) edge["$coalgebra$", swap] (m-2-1)
+      (m-2-2) edge["$algebra$", swap] (m-1-2)
+      (m-2-1) edge["$map\ hylo$", swap] (m-2-2)
+      ;
+    \end{tikzpicture}
+    \begin{tikzpicture}
+      \node[visible on=<1>] {
+        \begin{minipage}{\textwidth}
+          \begin{lstlisting}[style=scala]
+def hylo[F[_]: Functor, A, B](a: A)(
+  alg  : F[B] =>   B,
+  coalg:   A  => F[A]
+): B =
+  //...
+          \end{lstlisting}
+        \end{minipage}
+      };
+      \node[visible on=<2>] {
+        \begin{minipage}{\textwidth}
+          \begin{lstlisting}[style=scala]
+def hylo[F[_]: Functor, A, B](a: A)(
+  alg  : F[B] =>   B,
+  coalg:   A  => F[A]
+): B =
+      coalg(a)
+          \end{lstlisting}
+        \end{minipage}
+      };
+      \node[visible on=<3>] {
+        \begin{minipage}{\textwidth}
+          \begin{lstlisting}[style=scala]
+def hylo[F[_]: Functor, A, B](a: A)(
+  alg  : F[B] =>   B,
+  coalg:   A  => F[A]
+): B =
+      coalg(a).map(hylo(...          ))
+          \end{lstlisting}
+        \end{minipage}
+      };
+      \node[visible on=<4>] {
+        \begin{minipage}{\textwidth}
+          \begin{lstlisting}[style=scala]
+def hylo[F[_]: Functor, A, B](a: A)(
+  alg  : F[B] =>   B,
+  coalg:   A  => F[A]
+): B =
+      coalg(a).map(hylo(_)(alg, coalg))
+          \end{lstlisting}
+        \end{minipage}
+      };
+      \node[visible on=<5>] {
+        \begin{minipage}{\textwidth}
+          \begin{lstlisting}[style=scala]
+def hylo[F[_]: Functor, A, B](a: A)(
+  alg  : F[B] =>   B,
+  coalg:   A  => F[A]
+): B =
+  alg(coalg(a).map(hylo(_)(alg, coalg)))
+          \end{lstlisting}
+        \end{minipage}
+      };
+    \end{tikzpicture}
+  \end{center}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{hylo intuition}
+  \begin{center}
+    \begin{lstlisting}[style=scala]
+val input = List("hello", "scala", "world")
+val f: (String, Int) => Int = _.length + _
+
+foldRight(input)(1)(f) // 16
+    \end{lstlisting}
+  \end{center}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{hylo intuition}
+  \begin{center}
+    \begin{lstlisting}[style=scala]
+val input = List("hello", "scala", "world")
+
+val unpackList: List[String] => Option[(String, List[String])] =
+  _ match {
+    case Nil          => None
+    case head :: tail => Some((head, tail))
+  }
+
+val alg: Option[(String, Int)] => Int =
+  _ match {
+    case None              => 1
+    case Some((head, acc)) => head.length + acc
+  }
+
+hylo(input)(alg, unpackList) // 16
+    \end{lstlisting}
+  \end{center}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{hylo intuition}
+  \begin{center}
+    \begin{lstlisting}[style=scala]
+val list = ::("hello", ::("scala", ::("world", Nil)))
+val f: (String, Int) => Int = _.length + _
+
+f(list.head,                // "hello".length +
+  f(list.tail.head,         // "scala".length +
+    f(list.tail.tail.head,  // "world".length +
+      1)))                  // 1
+    \end{lstlisting}
+    \begin{lstlisting}[style=scala]
+alg(coalg(list).fmap(ist => // "hello".length +
+  alg(coalg(ist).fmap(st => // "scala".length +
+    alg(coalg(st).fmap(t => // "world".length +
+      alg(coalg(t).map(_ => // 1
+        ???))))))))
+    \end{lstlisting}
   \end{center}
 \end{frame}
 
