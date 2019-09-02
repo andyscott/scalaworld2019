@@ -70,6 +70,110 @@ hylo(input)(alg, unpackList)
 \end{frame}
 
 \begin{frame}[fragile]
+  \frametitle{creating/unpacking lists}
+  \begin{center}
+    \begin{tikzpicture}[commutative diagrams/every diagram]
+      \matrix[
+        matrix of math nodes,
+        matrix xscale=3,
+        matrix yscale=0.75,
+        nodes={scale=1.5},
+        name=m,
+        commutative diagrams/every cell,
+        nodes in empty cells
+      ] {
+        1
+        &
+        {List[A]}
+        \\
+        {A \times List[A]}
+        &
+        {List[A]}
+        \\
+        \\
+        \\
+        {1 + A \times List[A]}
+        &
+        {List[A]}
+        \\
+        {1 + A \times List[A]}
+        &
+        {List[A]}
+        \\
+      };
+      \path[commutative diagrams/.cd, every arrow, every label]
+      (m-1-1) edge["$nil$"] (m-1-2)
+      (m-2-1) edge["$cons$"] (m-2-2)
+      (m-5-1) edge["$\lbrack{nil, cons}\rbrack$"] (m-5-2)
+      (m-6-2) edge["$match$", swap, zz] (m-6-1)
+      ;
+
+      \node[anchor=north west] at (m-5-1.west |- m-2-1.south) {
+        \begin{minipage}{\textwidth}
+          \begin{lstlisting}[style=scala]
+def nil[A]: List[A] = Nil
+def cons[A](head: A, tail: List[A]): List[A] =
+  head :: tail
+          \end{lstlisting}
+        \end{minipage}
+      };
+
+    \end{tikzpicture}
+  \end{center}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{List foldRight}
+  \begin{center}
+    \begin{lstlisting}[style=scala]
+def foldRight[A, B](la: List[A])
+  (z: B)(f: (A, B) => B): B = la match {
+    case Nil => z
+    case head :: tail => f(head, foldRight(tail)(z)(f))
+  }
+    \end{lstlisting}
+    \pause
+    \begin{tikzpicture}[commutative diagrams/every diagram]
+      \matrix[
+        matrix of math nodes,
+        matrix xscale=3,
+        matrix yscale=1.25,
+        nodes={scale=1.5},
+        name=m,
+        commutative diagrams/every cell
+      ] {
+        \only<2->{List[A]}
+        &
+        \only<2->{B}
+        \\
+        \only<3-4>{1}
+        \only<5>{1 + A \times B}
+        &
+        \only<3-5>{B}
+        \\
+        \only<4>{A \times B}
+        \only<7->{1 + A \times List[A]}
+        &
+        \only<4>{B}
+        \only<6->{1 + A \times B}
+        \\
+      };
+      \path[commutative diagrams/.cd, every arrow, every label]
+      (m-1-1) edge["$foldRight$", visible on=<2->] (m-1-2)
+      (m-2-1) edge["$z$", visible on=<3-4>] (m-2-2)
+      (m-3-1) edge["$f$", visible on=<4>] (m-3-2)
+      (m-2-1) edge["$\lbrack{z, f}\rbrack$", visible on=<5>] (m-2-2)
+      (m-3-2) edge["$\lbrack{z, f}\rbrack$", swap, visible on=<6->] (m-1-2)
+      (m-1-1) edge["$match$", swap, zz, visible on=<7->] (m-3-1)
+      (m-3-1) edge["$id + ...$", swap, visible on=<8>] (m-3-2)
+      (m-3-1) edge["$id + id \times ...$", swap, visible on=<9>] (m-3-2)
+      (m-3-1) edge["$id + id \times foldRight$", swap, visible on=<10>] (m-3-2)
+      ;
+    \end{tikzpicture}
+  \end{center}
+\end{frame}
+
+\begin{frame}[fragile]
   \frametitle{foldRight intuition}
   \begin{center}
     \begin{lstlisting}[style=scala]
@@ -125,111 +229,6 @@ foldRight(list1)(1)(f)
     \end{lstlisting}
   \end{center}
 \end{frame}
-
-\begin{frame}[fragile]
-  \frametitle{creating/unpacking lists}
-  \begin{center}
-    \begin{tikzpicture}[commutative diagrams/every diagram]
-      \matrix[
-        matrix of math nodes,
-        matrix xscale=3,
-        matrix yscale=0.75,
-        nodes={scale=1.5},
-        name=m,
-        commutative diagrams/every cell,
-        nodes in empty cells
-      ] {
-        1
-        &
-        {List[A]}
-        \\
-        {A \times List[A]}
-        &
-        {List[A]}
-        \\
-        \\
-        \\
-        {1 + A \times List[A]}
-        &
-        {List[A]}
-        \\
-        {1 + A \times List[A]}
-        &
-        {List[A]}
-        \\
-      };
-      \path[commutative diagrams/.cd, every arrow, every label]
-      (m-1-1) edge["$nil$"] (m-1-2)
-      (m-2-1) edge["$cons$"] (m-2-2)
-      (m-5-1) edge["$\lbrack{nil, cons}\rbrack$"] (m-5-2)
-      (m-6-2) edge["$match$", swap, zz] (m-6-1)
-      ;
-
-      \node[anchor=north west] at (m-5-1.west |- m-2-1.south) {
-        \begin{minipage}{\textwidth}
-          \begin{lstlisting}[style=scala]
-def nil[A]: List[A] = Nil
-def cons[A](head: A, tail: List[A]): List[A] =
-  head :: tail
-          \end{lstlisting}
-        \end{minipage}
-      };
-
-    \end{tikzpicture}
-  \end{center}
-\end{frame}
-
-\begin{frame}[fragile]
-  \frametitle{foldRight diagram}
-  \begin{center}
-    \begin{lstlisting}[style=scala]
-def foldRight[A, B](la: List[A])
-  (z: B)(f: (A, B) => B): B = la match {
-    case Nil => z
-    case head :: tail => f(head, foldRight(tail)(z)(f))
-  }
-    \end{lstlisting}
-    \pause
-    \begin{tikzpicture}[commutative diagrams/every diagram]
-      \matrix[
-        matrix of math nodes,
-        matrix xscale=3,
-        matrix yscale=1.25,
-        nodes={scale=1.5},
-        name=m,
-        commutative diagrams/every cell
-      ] {
-        \only<2->{List[A]}
-        &
-        \only<2->{B}
-        \\
-        \only<3-4>{1}
-        \only<5>{1 + A \times B}
-        &
-        \only<3-5>{B}
-        \\
-        \only<4>{A \times B}
-        \only<7->{1 + A \times List[A]}
-        &
-        \only<4>{B}
-        \only<6->{1 + A \times B}
-        \\
-      };
-      \path[commutative diagrams/.cd, every arrow, every label]
-      (m-1-1) edge["$foldRight$", visible on=<2->] (m-1-2)
-      (m-2-1) edge["$z$", visible on=<3-4>] (m-2-2)
-      (m-3-1) edge["$f$", visible on=<4>] (m-3-2)
-      (m-2-1) edge["$\lbrack{z, f}\rbrack$", visible on=<5>] (m-2-2)
-      (m-3-2) edge["$\lbrack{z, f}\rbrack$", swap, visible on=<6->] (m-1-2)
-      (m-1-1) edge["$match$", swap, zz, visible on=<7->] (m-3-1)
-      (m-3-1) edge["$id + ...$", swap, visible on=<8>] (m-3-2)
-      (m-3-1) edge["$id + id \times ...$", swap, visible on=<9>] (m-3-2)
-      (m-3-1) edge["$id + id \times foldRight$", swap, visible on=<10>] (m-3-2)
-      ;
-    \end{tikzpicture}
-  \end{center}
-\end{frame}
-
 
 \begin{frame}[fragile]
   \frametitle{reshaping foldRight}
