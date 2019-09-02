@@ -19,7 +19,7 @@ foldRight(input)(0)(f) // 15
     \begin{lstlisting}[style=scala]
 val input = List("hello", "scala", "world")
 
-val unpackList: List[String] => Option[(String, List[String])] =
+val coalg: List[String] => Option[(String, List[String])] =
   _ match {
     case Nil          => None
     case head :: tail => Some((head, tail))
@@ -31,7 +31,7 @@ val alg: Option[(String, Int)] => Int =
     case Some((head, acc)) => head.length + acc
   }
 
-hylo(input)(alg, unpackList) // 15
+hylo(input)(alg, coalg) // 15
     \end{lstlisting}
   \end{center}
 \end{frame}
