@@ -225,7 +225,7 @@ foldRight(input)(z)(f)
     \begin{lstlisting}[style=scala]
 def alg: Option[(String, Int)] => Int =
   _ match {
-    case None => 1
+    case None => 0
     case Some((head, acc)) => head.length + acc
   }
 
