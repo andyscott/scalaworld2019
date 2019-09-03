@@ -18,8 +18,10 @@ foldRight(input)(0)(f) // 15
   \begin{center}
     \begin{lstlisting}[style=scala]
 val input = List("hello", "scala", "world")
+// F[A] = Option[(String, A)] = 1 + String x A
 
-val coalg: List[String] => Option[(String, List[String])] =
+val coalg: List[String] =>
+  Option[(String, List[String])] =
   _ match {
     case Nil          => None
     case head :: tail => Some((head, tail))
